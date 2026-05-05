@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>ワークシート①　お金の なかま</title>
+<link rel="stylesheet" href="ws_style.css">
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">🖨️ 印刷する</button>
+
+<!-- ===== ページ1 ===== -->
+<div class="page">
+  <div class="ws-header">
+    <div>
+      <div class="ws-title">お金の なかま を しろう</div>
+      <div class="ws-sub">ワークシート① ／ 5月</div>
+    </div>
+    <div class="ws-info">
+      なまえ <span></span><br>
+      日にち <span></span>
+    </div>
+  </div>
+
+  <div class="goal-box">お金の しゅるいと ねだんを おぼえよう</div>
+
+  <!-- 硬貨の種類 -->
+  <div class="section">
+    <div class="section-title">【1】 コインは いくら？　線で むすぼう</div>
+
+    <div style="display:flex; justify-content:space-around; align-items:center; margin: 20px 0; flex-wrap:wrap; gap:20px;">
+      <div style="text-align:center;">
+        <div class="money-icon" style="width:60px;height:60px;line-height:56px;font-size:15px;">１円</div>
+        <div style="margin-top:6px; font-size:18px;">①</div>
+      </div>
+      <div style="text-align:center;">
+        <div class="money-icon" style="width:60px;height:60px;line-height:56px;font-size:15px;">５円</div>
+        <div style="margin-top:6px; font-size:18px;">②</div>
+      </div>
+      <div style="text-align:center;">
+        <div class="money-icon" style="width:60px;height:60px;line-height:56px;font-size:15px;">１０円</div>
+        <div style="margin-top:6px; font-size:18px;">③</div>
+      </div>
+      <div style="text-align:center;">
+        <div class="money-icon" style="width:60px;height:60px;line-height:56px;font-size:15px;">５０円</div>
+        <div style="margin-top:6px; font-size:18px;">④</div>
+      </div>
+      <div style="text-align:center;">
+        <div class="money-icon" style="width:60px;height:60px;line-height:56px;font-size:15px; background:#ccc;">１００円</div>
+        <div style="margin-top:6px; font-size:18px;">⑤</div>
+      </div>
+      <div style="text-align:center;">
+        <div class="money-icon" style="width:60px;height:60px;line-height:56px;font-size:15px; background:#ccc;">５００円</div>
+        <div style="margin-top:6px; font-size:18px;">⑥</div>
+      </div>
+    </div>
+
+    <div style="display:flex; justify-content:space-around; margin-top:10px; flex-wrap:wrap; gap:12px;">
+      <div style="border:2px solid #333; border-radius:8px; padding:10px 20px; font-size:24px; font-weight:700;">500円</div>
+      <div style="border:2px solid #333; border-radius:8px; padding:10px 20px; font-size:24px; font-weight:700;">1円</div>
+      <div style="border:2px solid #333; border-radius:8px; padding:10px 20px; font-size:24px; font-weight:700;">10円</div>
+      <div style="border:2px solid #333; border-radius:8px; padding:10px 20px; font-size:24px; font-weight:700;">50円</div>
+      <div style="border:2px solid #333; border-radius:8px; padding:10px 20px; font-size:24px; font-weight:700;">100円</div>
+      <div style="border:2px solid #333; border-radius:8px; padding:10px 20px; font-size:24px; font-weight:700;">5円</div>
+    </div>
+  </div>
+
+  <!-- いくら持っている？ -->
+  <div class="section">
+    <div class="section-title">【2】 ぜんぶで いくら？　計算しよう</div>
+
+    <div class="mondai">
+      <div class="mondai-num">もんだい １</div>
+      <div class="mondai-text">
+        <span class="money-icon">１０円</span>
+        <span class="money-icon">１０円</span>
+        <span class="money-icon">１０円</span>
+        <span style="font-size:26px; margin:0 10px;">→</span>
+        ぜんぶで なんえん？
+      </div>
+      <div class="answer-box">
+        <span class="answer-label">しき：</span>
+        <span class="shiki-line"></span>
+        <span class="shiki-op">＋</span>
+        <span class="shiki-line"></span>
+        <span class="shiki-op">＋</span>
+        <span class="shiki-line"></span>
+        <span class="shiki-op">＝</span>
+        <span class="shiki-line"></span>
+        <span class="answer-unit">円</span>
+      </div>
+    </div>
+
+    <div class="mondai">
+      <div class="mondai-num">もんだい ２</div>
+      <div class="mondai-text">
+        <span class="money-icon" style="background:#ccc;">１００円</span>
+        <span class="money-icon">１０円</span>
+        <span class="money-icon">１０円</span>
+        <span class="money-icon">１円</span>
+        <span style="font-size:26px; margin:0 10px;">→</span>
+        ぜんぶで なんえん？
+      </div>
+      <div class="big-answer">
+        <span class="answer-label">こたえ：</span>
+        <span class="answer-line"></span>
+        <span class="answer-unit">円</span>
+      </div>
+    </div>
+
+    <div class="mondai">
+      <div class="mondai-num">もんだい ３</div>
+      <div class="mondai-text">
+        <span class="bill-icon">1000円</span>
+        <span class="money-icon" style="background:#ccc;">５００円</span>
+        <span class="money-icon">１０円</span>
+        <span style="font-size:26px; margin:0 10px;">→</span>
+        ぜんぶで なんえん？
+      </div>
+      <div class="big-answer">
+        <span class="answer-label">こたえ：</span>
+        <span class="answer-line"></span>
+        <span class="answer-unit">円</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 振り返り -->
+  <div class="furikaeri">
+    <div class="furikaeri-title">ふりかえり　　できたら ✓ しよう</div>
+    <div class="check-item"><div class="check-box"></div> コインの しゅるいが わかった</div>
+    <div class="check-item"><div class="check-box"></div> ぜんぶの かねがく を けいさんできた</div>
+    <div class="check-item"><div class="check-box"></div> むずかしかったけど さいごまで やった</div>
+    <div style="margin-top:14px; font-size:18px;">きょうの かんそう：
+      <div style="border-bottom:2px solid #999; margin-top:8px; height:44px;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ページ2 ===== -->
+<div class="page">
+  <div class="ws-header">
+    <div>
+      <div class="ws-title">ちょうどの きんがくを つくろう</div>
+      <div class="ws-sub">ワークシート①‐２ ／ 5月</div>
+    </div>
+    <div class="ws-info">
+      なまえ <span></span><br>
+      日にち <span></span>
+    </div>
+  </div>
+
+  <div class="goal-box">ちょうどの きんがくを コインで つくれるようになろう</div>
+
+  <div class="hint-box">100円 = 10円 ×10まい　／　50円 = 10円 ×5まい</div>
+
+  <div class="section">
+    <div class="section-title">【3】 コインを えらんで ちょうどにしよう</div>
+
+    <table class="ws-table">
+      <tr>
+        <th>ねだん</th>
+        <th>つかうコイン（〇をつけよう）</th>
+        <th>まい数</th>
+      </tr>
+      <tr>
+        <td style="font-size:26px; font-weight:700;">30円</td>
+        <td style="text-align:left; padding:10px;">
+          <span class="money-icon" style="font-size:12px;">１円</span>
+          <span class="money-icon" style="font-size:12px;">５円</span>
+          <span class="money-icon" style="font-size:12px;">１０円</span>
+          <span class="money-icon" style="font-size:12px;background:#ccc;">５０円</span>
+          <span class="money-icon" style="font-size:12px;background:#ccc;">１００円</span>
+        </td>
+        <td class="write"></td>
+      </tr>
+      <tr>
+        <td style="font-size:26px; font-weight:700;">70円</td>
+        <td style="text-align:left; padding:10px;">
+          <span class="money-icon" style="font-size:12px;">１円</span>
+          <span class="money-icon" style="font-size:12px;">５円</span>
+          <span class="money-icon" style="font-size:12px;">１０円</span>
+          <span class="money-icon" style="font-size:12px;background:#ccc;">５０円</span>
+          <span class="money-icon" style="font-size:12px;background:#ccc;">１００円</span>
+        </td>
+        <td class="write"></td>
+      </tr>
+      <tr>
+        <td style="font-size:26px; font-weight:700;">130円</td>
+        <td style="text-align:left; padding:10px;">
+          <span class="money-icon" style="font-size:12px;">１円</span>
+          <span class="money-icon" style="font-size:12px;">５円</span>
+          <span class="money-icon" style="font-size:12px;">１０円</span>
+          <span class="money-icon" style="font-size:12px;background:#ccc;">５０円</span>
+          <span class="money-icon" style="font-size:12px;background:#ccc;">１００円</span>
+        </td>
+        <td class="write"></td>
+      </tr>
+      <tr>
+        <td style="font-size:26px; font-weight:700;">250円</td>
+        <td style="text-align:left; padding:10px;">
+          <span class="money-icon" style="font-size:12px;">１円</span>
+          <span class="money-icon" style="font-size:12px;">５円</span>
+          <span class="money-icon" style="font-size:12px;">１０円</span>
+          <span class="money-icon" style="font-size:12px;background:#ccc;">５０円</span>
+          <span class="money-icon" style="font-size:12px;background:#ccc;">１００円</span>
+          <span class="money-icon" style="font-size:12px;background:#ccc;">５００円</span>
+        </td>
+        <td class="write"></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="furikaeri">
+    <div class="furikaeri-title">せんせいの　サイン欄</div>
+    <div class="stamp-area">
+      <div class="stamp">よく<br>できました</div>
+      <div class="stamp">がんばり<br>ました</div>
+      <div class="stamp">また<br>やろう</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

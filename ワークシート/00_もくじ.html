@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>ワークシート もくじ</title>
+<link rel="stylesheet" href="ws_style.css">
+<style>
+  .index-page { max-width: 740px; margin: 0 auto; padding: 30px; }
+  .index-title { font-size: 32px; font-weight: 900; text-align: center; margin-bottom: 6px; }
+  .index-sub { font-size: 18px; color: #555; text-align: center; margin-bottom: 32px; }
+  .ws-card {
+    display: flex; align-items: center; gap: 20px;
+    border: 2px solid #ccc; border-radius: 12px;
+    padding: 18px 22px; margin-bottom: 16px;
+    text-decoration: none; color: #222;
+    transition: box-shadow 0.2s;
+  }
+  .ws-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.15); border-color: #1565c0; }
+  .ws-num {
+    font-size: 32px; font-weight: 900; color: #fff;
+    background: #1565c0; border-radius: 50%;
+    width: 56px; height: 56px; display: flex;
+    align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .ws-card-body { flex: 1; }
+  .ws-card-title { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+  .ws-card-meta { font-size: 17px; color: #666; }
+  .ws-card-badge {
+    font-size: 15px; padding: 4px 12px;
+    border-radius: 20px; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .badge-money { background: #fff9c4; color: #f57f17; border: 2px solid #f9a825; }
+  .badge-time  { background: #e3f2fd; color: #1565c0; border: 2px solid #42a5f5; }
+  .badge-work  { background: #e8f5e9; color: #2e7d32; border: 2px solid #66bb6a; }
+  .section-label {
+    font-size: 18px; font-weight: 700; color: #fff;
+    padding: 6px 16px; border-radius: 6px; margin: 24px 0 10px 0;
+    display: inline-block;
+  }
+  .usage-box {
+    background: #f5f5f5; border-radius: 10px;
+    padding: 20px 24px; margin-top: 32px; font-size: 19px; line-height: 2;
+  }
+  .usage-box h3 { font-size: 21px; margin-bottom: 8px; color: #333; }
+</style>
+</head>
+<body>
+<div class="index-page">
+
+  <div style="text-align:center; margin-bottom:10px; font-size:40px;">📚</div>
+  <div class="index-title">数学ワークシート　もくじ</div>
+  <div class="index-sub">特別支援学校 中学部｜生活する力を育てる数学</div>
+
+  <div class="section-label" style="background:#f57f17;">💰 お金の単元</div>
+
+  <a class="ws-card" href="01_お金_硬貨とお札.html">
+    <div class="ws-num">①</div>
+    <div class="ws-card-body">
+      <div class="ws-card-title">お金のなかまを知ろう</div>
+      <div class="ws-card-meta">硬貨・紙幣の種類　／　合計金額の計算　／　ちょうどの金額をつくる</div>
+    </div>
+    <div class="ws-card-badge badge-money">5月</div>
+  </a>
+
+  <a class="ws-card" href="02_お金_おつり.html">
+    <div class="ws-num">②</div>
+    <div class="ws-card-body">
+      <div class="ws-card-title">おつりをたしかめよう</div>
+      <div class="ws-card-meta">おつりの計算　／　おつりが正しいか確認する　／　間違いへの対処</div>
+    </div>
+    <div class="ws-card-badge badge-money">6月</div>
+  </a>
+
+  <a class="ws-card" href="03_お金_予算で買い物.html">
+    <div class="ws-num">③</div>
+    <div class="ws-card-body">
+      <div class="ws-card-title">よさんでかいものしよう</div>
+      <div class="ws-card-meta">買い物リストの作成　／　予算内かチェック　／　あきらめる選択</div>
+    </div>
+    <div class="ws-card-badge badge-money">9月</div>
+  </a>
+
+  <div class="section-label" style="background:#1565c0;">🕐 時間の単元</div>
+
+  <a class="ws-card" href="04_時間_逆算.html">
+    <div class="ws-num">④</div>
+    <div class="ws-card-body">
+      <div class="ws-card-title">じかんをかんがえよう・ぎゃくさん</div>
+      <div class="ws-card-meta">〇分後の時刻　／　時間の差　／　逆算して出発時刻を求める</div>
+    </div>
+    <div class="ws-card-badge badge-time">7月</div>
+  </a>
+
+  <div class="section-label" style="background:#2e7d32;">💼 仕事の単元</div>
+
+  <a class="ws-card" href="05_仕事_給料.html">
+    <div class="ws-num">⑤</div>
+    <div class="ws-card-body">
+      <div class="ws-card-title">はたらいてきゅうりょうをもらおう</div>
+      <div class="ws-card-meta">時給×時間の計算　／　勤務記録　／　給料の使い道を計画する</div>
+    </div>
+    <div class="ws-card-badge badge-work">2月</div>
+  </a>
+
+  <div class="usage-box">
+    <h3>🖨️ 印刷するときは</h3>
+    各ワークシートを開いて「印刷する」ボタンを押してください。<br>
+    A4・縦・余白「標準」で印刷するときれいに仕上がります。<br><br>
+    <h3>📝 使い方のポイント</h3>
+    ・電卓の使用はOKです（⑤の給料計算は特に積極的に）<br>
+    ・わからないときはヒントボックスを一緒に読みましょう<br>
+    ・振り返りのチェックボックスは本人に記入させましょう<br>
+    ・スタンプ欄は授業後に先生が押してください
+  </div>
+
+</div>
+</body>
+</html>

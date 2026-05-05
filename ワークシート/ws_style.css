@@ -1,0 +1,303 @@
+/* 特別支援学校 数学ワークシート 共通スタイル */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap');
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Noto Sans JP', 'ヒラギノ角ゴ Pro', 'Meiryo', sans-serif;
+  font-size: 22px;
+  color: #222;
+  background: #fff;
+  padding: 20px;
+}
+
+@media print {
+  body { padding: 0; }
+  .no-print { display: none; }
+  .page { page-break-after: always; }
+}
+
+.page {
+  max-width: 740px;
+  margin: 0 auto 60px auto;
+  padding: 30px;
+  border: 3px solid #333;
+  border-radius: 12px;
+}
+
+/* ヘッダー */
+.ws-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 3px solid #333;
+  padding-bottom: 10px;
+  margin-bottom: 24px;
+}
+.ws-title {
+  font-size: 28px;
+  font-weight: 900;
+}
+.ws-sub {
+  font-size: 16px;
+  color: #555;
+  margin-top: 4px;
+}
+.ws-info {
+  text-align: right;
+  font-size: 18px;
+  line-height: 2;
+}
+.ws-info span {
+  display: inline-block;
+  min-width: 120px;
+  border-bottom: 2px solid #333;
+  margin-left: 8px;
+}
+
+/* 目標ボックス */
+.goal-box {
+  background: #fff8e1;
+  border: 2px solid #f9a825;
+  border-radius: 8px;
+  padding: 12px 18px;
+  margin-bottom: 24px;
+  font-size: 20px;
+}
+.goal-box::before {
+  content: "★ きょうのめあて　";
+  font-weight: 700;
+  color: #e65100;
+}
+
+/* 問題セクション */
+.section {
+  margin-bottom: 28px;
+}
+.section-title {
+  font-size: 21px;
+  font-weight: 700;
+  background: #e3f2fd;
+  border-left: 6px solid #1565c0;
+  padding: 8px 14px;
+  margin-bottom: 16px;
+  border-radius: 0 6px 6px 0;
+}
+
+/* 問題 */
+.mondai {
+  margin-bottom: 20px;
+  padding: 14px 16px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  background: #fafafa;
+}
+.mondai-num {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1565c0;
+  margin-bottom: 8px;
+}
+.mondai-text {
+  font-size: 22px;
+  line-height: 1.8;
+  margin-bottom: 12px;
+}
+.mondai-text .price {
+  font-size: 26px;
+  font-weight: 700;
+  color: #c62828;
+}
+.mondai-text .yen {
+  color: #2e7d32;
+  font-weight: 700;
+}
+
+/* 答え欄 */
+.answer-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+.answer-label {
+  font-size: 20px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.answer-line {
+  border-bottom: 3px solid #333;
+  min-width: 160px;
+  height: 40px;
+  display: inline-block;
+}
+.answer-unit {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+/* 式の欄 */
+.shiki-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+  font-size: 22px;
+}
+.shiki-line {
+  border-bottom: 3px solid #555;
+  min-width: 80px;
+  height: 38px;
+  display: inline-block;
+}
+.shiki-op {
+  font-size: 26px;
+  font-weight: 700;
+  color: #555;
+}
+
+/* 大きな答え欄 */
+.big-answer {
+  margin-top: 14px;
+  padding: 14px;
+  background: #e8f5e9;
+  border: 2px solid #2e7d32;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.big-answer .answer-label { color: #1b5e20; font-size: 22px; }
+.big-answer .answer-line { min-width: 200px; border-color: #2e7d32; }
+
+/* チェックボックス */
+.check-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+  font-size: 21px;
+}
+.check-box {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #333;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+/* 表 */
+.ws-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 16px;
+  font-size: 20px;
+}
+.ws-table th {
+  background: #1565c0;
+  color: #fff;
+  padding: 10px 14px;
+  text-align: center;
+  font-weight: 700;
+}
+.ws-table td {
+  border: 2px solid #aaa;
+  padding: 12px 14px;
+  text-align: center;
+}
+.ws-table td.write {
+  background: #fff;
+  min-width: 120px;
+}
+.ws-table tr:nth-child(even) td { background: #f5f5f5; }
+.ws-table tr:nth-child(even) td.write { background: #fff; }
+
+/* 振り返り */
+.furikaeri {
+  margin-top: 28px;
+  border: 2px dashed #999;
+  border-radius: 8px;
+  padding: 16px;
+}
+.furikaeri-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #555;
+}
+.stamp-area {
+  display: flex;
+  gap: 24px;
+  margin-top: 10px;
+}
+.stamp {
+  width: 70px;
+  height: 70px;
+  border: 3px solid #ccc;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-size: 13px;
+  color: #999;
+  text-align: center;
+}
+
+/* ヒントボックス */
+.hint-box {
+  background: #f3e5f5;
+  border: 2px solid #7b1fa2;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 12px 0;
+  font-size: 19px;
+}
+.hint-box::before {
+  content: "💡 ヒント　";
+  font-weight: 700;
+  color: #7b1fa2;
+}
+
+/* コイン・お金イメージ */
+.money-icon {
+  display: inline-block;
+  background: #ffd700;
+  border: 2px solid #b8860b;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  line-height: 40px;
+  text-align: center;
+  font-weight: 900;
+  font-size: 14px;
+  vertical-align: middle;
+  margin: 2px;
+}
+.bill-icon {
+  display: inline-block;
+  background: #c8e6c9;
+  border: 2px solid #388e3c;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-weight: 900;
+  font-size: 16px;
+  vertical-align: middle;
+  margin: 2px;
+}
+
+/* 印刷ボタン */
+.print-btn {
+  display: block;
+  margin: 0 auto 40px auto;
+  padding: 16px 48px;
+  background: #1565c0;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 22px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.print-btn:hover { background: #0d47a1; }

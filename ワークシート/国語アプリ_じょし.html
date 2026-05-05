@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>じょしを れんしゅうしよう</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'ヒラギノ丸ゴ Pro', 'Hiragino Maru Gothic Pro', 'Meiryo', sans-serif;
+  background: #e3f2fd;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 32px;
+  font-weight: 900;
+  color: #1565c0;
+  text-align: center;
+  margin-bottom: 6px;
+}
+.subtitle {
+  font-size: 20px;
+  color: #555;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* レベル選択 */
+.level-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.level-btn {
+  padding: 10px 24px;
+  border: 3px solid #1565c0;
+  border-radius: 30px;
+  font-size: 20px;
+  font-weight: 700;
+  background: #fff;
+  color: #1565c0;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.level-btn.active {
+  background: #1565c0;
+  color: #fff;
+}
+
+/* スコア */
+.score-bar {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #333;
+}
+.score-bar span { color: #1565c0; }
+
+/* 問題カード */
+.card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 32px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.progress-bar-wrap {
+  background: #e0e0e0;
+  border-radius: 10px;
+  height: 14px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: #42a5f5;
+  border-radius: 10px;
+  transition: width 0.3s;
+}
+
+.q-num { font-size: 18px; color: #888; margin-bottom: 10px; }
+
+.sentence {
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 2;
+  margin: 20px 0;
+  color: #222;
+}
+.blank {
+  display: inline-block;
+  width: 64px;
+  height: 54px;
+  border: 4px solid #1565c0;
+  border-radius: 12px;
+  background: #e3f2fd;
+  vertical-align: middle;
+  margin: 0 6px;
+  font-size: 40px;
+  font-weight: 900;
+  line-height: 54px;
+  text-align: center;
+  color: #1565c0;
+  transition: background 0.3s;
+}
+.blank.correct { background: #c8e6c9; border-color: #43a047; color: #2e7d32; }
+.blank.wrong   { background: #ffcdd2; border-color: #e53935; color: #c62828; }
+
+.emoji-hint { font-size: 64px; margin-bottom: 8px; }
+
+/* 選択ボタン */
+.choices {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+.choice {
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+  font-size: 52px;
+  font-weight: 900;
+  border: 4px solid;
+  cursor: pointer;
+  transition: transform 0.1s, opacity 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.choice:active { transform: scale(0.93); }
+.choice-ha { background: #fff9c4; border-color: #f9a825; color: #e65100; }
+.choice-wo { background: #e3f2fd; border-color: #42a5f5; color: #1565c0; }
+.choice-ni { background: #e8f5e9; border-color: #66bb6a; color: #2e7d32; }
+.choice.disabled { opacity: 0.4; cursor: default; pointer-events: none; }
+.choice.shake { animation: shake 0.3s; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)}
+  25%{transform:translateX(-8px)}
+  75%{transform:translateX(8px)}
+}
+
+/* フィードバック */
+.feedback {
+  font-size: 30px;
+  font-weight: 700;
+  min-height: 48px;
+  margin-top: 18px;
+  text-align: center;
+}
+.feedback.correct-msg { color: #2e7d32; }
+.feedback.wrong-msg   { color: #c62828; }
+
+/* 次へボタン */
+.next-btn {
+  display: none;
+  margin: 16px auto 0;
+  padding: 14px 48px;
+  background: #1565c0;
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  font-size: 24px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+.next-btn:hover { background: #0d47a1; }
+
+/* 結果画面 */
+.result-card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 40px 32px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  text-align: center;
+  display: none;
+}
+.result-emoji { font-size: 80px; margin-bottom: 16px; }
+.result-title { font-size: 36px; font-weight: 900; color: #1565c0; margin-bottom: 10px; }
+.result-score { font-size: 28px; margin-bottom: 28px; }
+.result-score span { font-size: 48px; font-weight: 900; color: #e65100; }
+.retry-btn {
+  padding: 16px 48px;
+  background: #e65100;
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  font-size: 26px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  margin: 6px;
+}
+.retry-btn:hover { background: #bf360c; }
+.home-btn {
+  padding: 16px 48px;
+  background: #1565c0;
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  font-size: 26px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  margin: 6px;
+}
+
+/* 星アニメ */
+.stars {
+  font-size: 40px;
+  letter-spacing: 8px;
+  margin: 10px 0;
+}
+</style>
+</head>
+<body>
+
+<h1>じょしを れんしゅうしよう ✏️</h1>
+<div class="subtitle">は・を・に　を えらぼう</div>
+
+<!-- レベル選択 -->
+<div class="level-bar">
+  <button class="level-btn active" onclick="setLevel(1)">⭐ レベル１（は）</button>
+  <button class="level-btn" onclick="setLevel(2)">⭐⭐ レベル２（は・を）</button>
+  <button class="level-btn" onclick="setLevel(3)">⭐⭐⭐ レベル３（は・を・に）</button>
+</div>
+
+<!-- スコア -->
+<div class="score-bar">
+  <div>せいかい：<span id="correct-count">0</span></div>
+  <div>もんだい：<span id="total-count">0</span> / <span id="total-max">5</span></div>
+</div>
+
+<!-- 問題カード -->
+<div class="card" id="quiz-card">
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+  </div>
+  <div class="q-num" id="q-num">もんだい 1 / 5</div>
+  <div class="emoji-hint" id="emoji-hint">🐱</div>
+  <div class="sentence" id="sentence-display"></div>
+  <div class="choices" id="choices"></div>
+  <div class="feedback" id="feedback"></div>
+  <button class="next-btn" id="next-btn" onclick="nextQuestion()">つぎへ →</button>
+</div>
+
+<!-- 結果カード -->
+<div class="result-card" id="result-card">
+  <div class="result-emoji" id="result-emoji">🎉</div>
+  <div class="stars" id="result-stars"></div>
+  <div class="result-title" id="result-title">おわったよ！</div>
+  <div class="result-score">
+    <span id="result-score-num">0</span> もん せいかい！
+  </div>
+  <div id="result-msg" style="font-size:22px; color:#555; margin-bottom:24px;"></div>
+  <button class="retry-btn" onclick="startQuiz()">もういちど やる</button>
+  <button class="home-btn" onclick="setLevel(currentLevel)">はじめにもどる</button>
+</div>
+
+<script>
+// 問題データ
+const questions = {
+  // レベル1：「は」のみ
+  1: [
+    { emoji:'🐱', before:'ねこ', joshi:'は', after:'かわいい' },
+    { emoji:'🍎', before:'りんご', joshi:'は', after:'あかい' },
+    { emoji:'☀️', before:'おひさま', joshi:'は', after:'あかるい' },
+    { emoji:'🐶', before:'いぬ', joshi:'は', after:'おおきい' },
+    { emoji:'🌸', before:'はな', joshi:'は', after:'きれい' },
+    { emoji:'🎒', before:'わたし', joshi:'は', after:'がくせいです' },
+    { emoji:'🍌', before:'ばなな', joshi:'は', after:'あまい' },
+  ],
+  // レベル2：「は・を」
+  2: [
+    { emoji:'🐱', before:'ねこ', joshi:'は', after:'かわいい' },
+    { emoji:'🍎', before:'りんご', joshi:'を', after:'たべる' },
+    { emoji:'📚', before:'ほん', joshi:'を', after:'よむ' },
+    { emoji:'☀️', before:'そら', joshi:'は', after:'あおい' },
+    { emoji:'🎵', before:'うた', joshi:'を', after:'うたう' },
+    { emoji:'🐶', before:'いぬ', joshi:'は', after:'はしる' },
+    { emoji:'💧', before:'みず', joshi:'を', after:'のむ' },
+    { emoji:'🌸', before:'はな', joshi:'は', after:'きれい' },
+  ],
+  // レベル3：「は・を・に」
+  3: [
+    { emoji:'🏫', before:'がっこう', joshi:'に', after:'いく' },
+    { emoji:'🍎', before:'りんご', joshi:'を', after:'たべる' },
+    { emoji:'🐱', before:'ねこ', joshi:'は', after:'かわいい' },
+    { emoji:'🚌', before:'バス', joshi:'に', after:'のる' },
+    { emoji:'📚', before:'ほん', joshi:'を', after:'よむ' },
+    { emoji:'🏠', before:'いえ', joshi:'に', after:'かえる' },
+    { emoji:'☀️', before:'そら', joshi:'は', after:'あおい' },
+    { emoji:'🎵', before:'うた', joshi:'を', after:'うたう' },
+    { emoji:'🌳', before:'こうえん', joshi:'に', after:'あそびにいく' },
+    { emoji:'💧', before:'みず', joshi:'を', after:'のむ' },
+  ],
+};
+
+const choicesByLevel = {
+  1: ['は'],
+  2: ['は', 'を'],
+  3: ['は', 'を', 'に'],
+};
+
+const choiceClass = { 'は':'choice-ha', 'を':'choice-wo', 'に':'choice-ni' };
+
+let currentLevel = 1;
+let currentQ = 0;
+let correctCount = 0;
+let quizData = [];
+let answered = false;
+
+function setLevel(lv) {
+  currentLevel = lv;
+  document.querySelectorAll('.level-btn').forEach((b,i) => {
+    b.classList.toggle('active', i === lv - 1);
+  });
+  startQuiz();
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startQuiz() {
+  const pool = shuffle(questions[currentLevel]);
+  quizData = pool.slice(0, 5);
+  currentQ = 0;
+  correctCount = 0;
+  answered = false;
+
+  document.getElementById('quiz-card').style.display = 'block';
+  document.getElementById('result-card').style.display = 'none';
+  document.getElementById('correct-count').textContent = 0;
+  document.getElementById('total-count').textContent = 0;
+  document.getElementById('total-max').textContent = quizData.length;
+
+  showQuestion();
+}
+
+function showQuestion() {
+  answered = false;
+  const q = quizData[currentQ];
+  const total = quizData.length;
+
+  document.getElementById('q-num').textContent = `もんだい ${currentQ + 1} / ${total}`;
+  document.getElementById('progress-fill').style.width = `${(currentQ / total) * 100}%`;
+  document.getElementById('emoji-hint').textContent = q.emoji;
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('next-btn').style.display = 'none';
+
+  // 文の表示
+  document.getElementById('sentence-display').innerHTML =
+    `${q.before} <span class="blank" id="blank-span">　</span> ${q.after}`;
+
+  // 選択肢
+  const choices = choicesByLevel[currentLevel];
+  const el = document.getElementById('choices');
+  el.innerHTML = '';
+  choices.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = `choice ${choiceClass[c]}`;
+    btn.textContent = c;
+    btn.onclick = () => handleAnswer(c, q.joshi, btn);
+    el.appendChild(btn);
+  });
+}
+
+function handleAnswer(selected, correct, btn) {
+  if (answered) return;
+  answered = true;
+
+  const blank = document.getElementById('blank-span');
+  const feedback = document.getElementById('feedback');
+  const allBtns = document.querySelectorAll('.choice');
+
+  allBtns.forEach(b => b.classList.add('disabled'));
+
+  if (selected === correct) {
+    blank.textContent = correct;
+    blank.classList.add('correct');
+    feedback.textContent = '⭕ せいかい！すごい！';
+    feedback.className = 'feedback correct-msg';
+    correctCount++;
+    document.getElementById('correct-count').textContent = correctCount;
+  } else {
+    blank.textContent = correct;
+    blank.classList.add('wrong');
+    feedback.textContent = `❌ こたえは「${correct}」だよ`;
+    feedback.className = 'feedback wrong-msg';
+    btn.classList.add('shake');
+  }
+
+  document.getElementById('total-count').textContent = currentQ + 1;
+  document.getElementById('next-btn').style.display = 'block';
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ >= quizData.length) {
+    showResult();
+  } else {
+    showQuestion();
+  }
+}
+
+function showResult() {
+  document.getElementById('quiz-card').style.display = 'none';
+  const result = document.getElementById('result-card');
+  result.style.display = 'block';
+
+  const total = quizData.length;
+  const rate = correctCount / total;
+
+  let emoji, title, msg, stars;
+  if (rate === 1) {
+    emoji = '🎉'; title = 'かんぺき！すごい！'; stars = '⭐⭐⭐';
+    msg = 'ぜんもん せいかい！ よくできました！';
+  } else if (rate >= 0.6) {
+    emoji = '😊'; title = 'よくできました！'; stars = '⭐⭐';
+    msg = 'もういちど やってみよう！';
+  } else {
+    emoji = '💪'; title = 'がんばったね！'; stars = '⭐';
+    msg = 'もういちど れんしゅう しよう！';
+  }
+
+  document.getElementById('result-emoji').textContent = emoji;
+  document.getElementById('result-title').textContent = title;
+  document.getElementById('result-stars').textContent = stars;
+  document.getElementById('result-score-num').textContent = correctCount;
+  document.getElementById('result-msg').textContent = msg;
+}
+
+// 初期起動
+startQuiz();
+</script>
+</body>
+</html>

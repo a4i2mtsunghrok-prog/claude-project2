@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>じかん① なんじ？なんぷんご？</title>
+<link rel="stylesheet" href="ws_style2.css">
+<style>
+/* アナログ時計 */
+.clock-wrap { display:inline-block; text-align:center; }
+.clock {
+  position:relative; width:160px; height:160px;
+  border:5px solid #333; border-radius:50%;
+  background:#fff; margin:0 auto;
+}
+.clock-num {
+  position:absolute; font-size:18px; font-weight:700;
+  transform:translate(-50%,-50%);
+}
+.clock-dot {
+  position:absolute; width:10px; height:10px;
+  background:#333; border-radius:50%;
+  top:50%; left:50%; transform:translate(-50%,-50%);
+}
+/* 時計の数字の位置 */
+.n12{top:10%; left:50%;}
+.n3{top:50%; right:2%; transform:translate(0,-50%);}
+.n6{bottom:2%; left:50%; transform:translate(-50%,0);}
+.n9{top:50%; left:2%; transform:translate(0,-50%);}
+
+/* 針（SVGで描く） */
+.hand-h { /* 時針 */
+  position:absolute; bottom:50%; left:50%;
+  width:5px; height:48px;
+  background:#333; border-radius:3px;
+  transform-origin:bottom center;
+}
+.hand-m { /* 分針 */
+  position:absolute; bottom:50%; left:50%;
+  width:3px; height:64px;
+  background:#555; border-radius:2px;
+  transform-origin:bottom center;
+}
+</style>
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">🖨️ いんさつする</button>
+
+<!-- ===== 1まいめ ===== -->
+<div class="page">
+  <div class="ws-header">
+    <div class="ws-title">とけいを よもう 🕐</div>
+    <div class="name-row">
+      <div class="name-field">なまえ <div class="name-line"></div></div>
+      <div class="name-field">ひ <div class="name-line" style="width:120px;"></div></div>
+    </div>
+  </div>
+
+  <div class="goal-box">とけいを みて なんじ なんぷんか いおう・かこう</div>
+
+  <div class="mondai">
+    <div class="mondai-num">もんだい 1</div>
+    <div class="mondai-text">なんじ なんぷんですか？</div>
+
+    <div style="display:flex; flex-wrap:wrap; gap:32px; justify-content:space-around; margin:20px 0;">
+
+      <!-- 9:00 -->
+      <div class="clock-wrap">
+        <svg width="160" height="160" viewBox="0 0 160 160">
+          <circle cx="80" cy="80" r="74" fill="white" stroke="#333" stroke-width="5"/>
+          <text x="80" y="22" text-anchor="middle" font-size="18" font-weight="bold">12</text>
+          <text x="148" y="86" text-anchor="middle" font-size="18" font-weight="bold">3</text>
+          <text x="80" y="152" text-anchor="middle" font-size="18" font-weight="bold">6</text>
+          <text x="14" y="86" text-anchor="middle" font-size="18" font-weight="bold">9</text>
+          <!-- 時針 9時 = 270° -->
+          <line x1="80" y1="80" x2="80" y2="40" stroke="#333" stroke-width="6" stroke-linecap="round"
+                transform="rotate(270 80 80)"/>
+          <!-- 分針 0分 = 0°（12の方向） -->
+          <line x1="80" y1="80" x2="80" y2="22" stroke="#555" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="80" cy="80" r="5" fill="#333"/>
+        </svg>
+        <div style="margin-top:10px; font-size:22px; font-weight:700;">①</div>
+        <div style="margin-top:6px;">
+          <div style="display:inline-block; border:3px solid #333; border-radius:8px; width:70px; height:50px; vertical-align:middle; background:#fff;"></div>
+          <span style="font-size:24px; font-weight:700;">じ</span>
+          <div style="display:inline-block; border:3px solid #333; border-radius:8px; width:70px; height:50px; vertical-align:middle; background:#fff;"></div>
+          <span style="font-size:24px; font-weight:700;">ふん</span>
+        </div>
+      </div>
+
+      <!-- 3:30 -->
+      <div class="clock-wrap">
+        <svg width="160" height="160" viewBox="0 0 160 160">
+          <circle cx="80" cy="80" r="74" fill="white" stroke="#333" stroke-width="5"/>
+          <text x="80" y="22" text-anchor="middle" font-size="18" font-weight="bold">12</text>
+          <text x="148" y="86" text-anchor="middle" font-size="18" font-weight="bold">3</text>
+          <text x="80" y="152" text-anchor="middle" font-size="18" font-weight="bold">6</text>
+          <text x="14" y="86" text-anchor="middle" font-size="18" font-weight="bold">9</text>
+          <!-- 時針 3:30 = 90+15 = 105° -->
+          <line x1="80" y1="80" x2="80" y2="40" stroke="#333" stroke-width="6" stroke-linecap="round"
+                transform="rotate(105 80 80)"/>
+          <!-- 分針 30分 = 180°（6の方向） -->
+          <line x1="80" y1="80" x2="80" y2="22" stroke="#555" stroke-width="3" stroke-linecap="round"
+                transform="rotate(180 80 80)"/>
+          <circle cx="80" cy="80" r="5" fill="#333"/>
+        </svg>
+        <div style="margin-top:10px; font-size:22px; font-weight:700;">②</div>
+        <div style="margin-top:6px;">
+          <div style="display:inline-block; border:3px solid #333; border-radius:8px; width:70px; height:50px; vertical-align:middle; background:#fff;"></div>
+          <span style="font-size:24px; font-weight:700;">じ</span>
+          <div style="display:inline-block; border:3px solid #333; border-radius:8px; width:70px; height:50px; vertical-align:middle; background:#fff;"></div>
+          <span style="font-size:24px; font-weight:700;">ふん</span>
+        </div>
+      </div>
+
+      <!-- 6:15 -->
+      <div class="clock-wrap">
+        <svg width="160" height="160" viewBox="0 0 160 160">
+          <circle cx="80" cy="80" r="74" fill="white" stroke="#333" stroke-width="5"/>
+          <text x="80" y="22" text-anchor="middle" font-size="18" font-weight="bold">12</text>
+          <text x="148" y="86" text-anchor="middle" font-size="18" font-weight="bold">3</text>
+          <text x="80" y="152" text-anchor="middle" font-size="18" font-weight="bold">6</text>
+          <text x="14" y="86" text-anchor="middle" font-size="18" font-weight="bold">9</text>
+          <!-- 時針 6:15 = 180+7.5 ≈ 187° -->
+          <line x1="80" y1="80" x2="80" y2="40" stroke="#333" stroke-width="6" stroke-linecap="round"
+                transform="rotate(187 80 80)"/>
+          <!-- 分針 15分 = 90° -->
+          <line x1="80" y1="80" x2="80" y2="22" stroke="#555" stroke-width="3" stroke-linecap="round"
+                transform="rotate(90 80 80)"/>
+          <circle cx="80" cy="80" r="5" fill="#333"/>
+        </svg>
+        <div style="margin-top:10px; font-size:22px; font-weight:700;">③</div>
+        <div style="margin-top:6px;">
+          <div style="display:inline-block; border:3px solid #333; border-radius:8px; width:70px; height:50px; vertical-align:middle; background:#fff;"></div>
+          <span style="font-size:24px; font-weight:700;">じ</span>
+          <div style="display:inline-block; border:3px solid #333; border-radius:8px; width:70px; height:50px; vertical-align:middle; background:#fff;"></div>
+          <span style="font-size:24px; font-weight:700;">ふん</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="furikaeri">
+    <div class="furikaeri-title">ふりかえり　✓ しよう</div>
+    <div class="check-row"><div class="check-sq"></div> とけいが よめた</div>
+    <div class="check-row"><div class="check-sq"></div> じと ふんが かけた</div>
+    <div class="stamp-row">
+      <div class="stamp">よく<br>できました</div>
+      <div class="stamp">がんばり<br>ました</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 2まいめ ===== -->
+<div class="page">
+  <div class="ws-header">
+    <div class="ws-title">30ぷんごは なんじ？ 🕐</div>
+    <div class="name-row">
+      <div class="name-field">なまえ <div class="name-line"></div></div>
+      <div class="name-field">ひ <div class="name-line" style="width:120px;"></div></div>
+    </div>
+  </div>
+
+  <div class="goal-box">30ぷんごの じこくが わかるようになろう</div>
+
+  <div class="hint">10じ → 30ぷんご → 10じ30ふん</div>
+
+  <div class="mondai">
+    <div class="mondai-num">もんだい 2</div>
+    <div class="mondai-text">
+      いま <span class="big">9じ00ふん</span> です。<br>
+      30ぷんごは なんじ なんぷん？
+    </div>
+    <div style="margin:16px 0; display:flex; align-items:center; gap:20px; flex-wrap:wrap;">
+      <svg width="130" height="130" viewBox="0 0 160 160">
+        <circle cx="80" cy="80" r="74" fill="white" stroke="#333" stroke-width="5"/>
+        <text x="80" y="22" text-anchor="middle" font-size="18" font-weight="bold">12</text>
+        <text x="148" y="86" text-anchor="middle" font-size="18" font-weight="bold">3</text>
+        <text x="80" y="152" text-anchor="middle" font-size="18" font-weight="bold">6</text>
+        <text x="14" y="86" text-anchor="middle" font-size="18" font-weight="bold">9</text>
+        <line x1="80" y1="80" x2="80" y2="40" stroke="#333" stroke-width="6" stroke-linecap="round"
+              transform="rotate(270 80 80)"/>
+        <line x1="80" y1="80" x2="80" y2="22" stroke="#555" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="80" cy="80" r="5" fill="#333"/>
+      </svg>
+      <div style="font-size:32px; font-weight:900; color:#1565c0;">＋30ぷん</div>
+      <div style="font-size:30px;">→</div>
+      <svg width="130" height="130" viewBox="0 0 160 160">
+        <circle cx="80" cy="80" r="74" fill="#fffde7" stroke="#f9a825" stroke-width="5"/>
+        <text x="80" y="22" text-anchor="middle" font-size="18" font-weight="bold">12</text>
+        <text x="148" y="86" text-anchor="middle" font-size="18" font-weight="bold">3</text>
+        <text x="80" y="152" text-anchor="middle" font-size="18" font-weight="bold">6</text>
+        <text x="14" y="86" text-anchor="middle" font-size="18" font-weight="bold">9</text>
+        <text x="80" y="88" text-anchor="middle" font-size="18" fill="#e65100">?</text>
+        <circle cx="80" cy="80" r="5" fill="#333"/>
+      </svg>
+    </div>
+    <div class="answer-area">
+      <span class="answer-label">こたえ：</span>
+      <div class="answer-box-big" style="width:100px;"></div>
+      <span class="answer-unit">じ</span>
+      <div class="answer-box-big" style="width:100px;"></div>
+      <span class="answer-unit">ふん</span>
+    </div>
+  </div>
+
+  <div class="mondai">
+    <div class="mondai-num">もんだい 3</div>
+    <div class="mondai-text">
+      バスは <span class="big">10じ00ふん</span> に でます。<br>
+      いえを でるのは バスの <span class="big">10ぷんまえ</span>。<br>
+      なんじに いえを でればいい？
+    </div>
+    <div class="hint">10じ00ふん の 10ぷんまえ ＝ ？</div>
+    <div class="answer-area">
+      <span class="answer-label">こたえ：</span>
+      <div class="answer-box-big" style="width:100px;"></div>
+      <span class="answer-unit">じ</span>
+      <div class="answer-box-big" style="width:100px;"></div>
+      <span class="answer-unit">ふん</span>
+    </div>
+  </div>
+
+  <div class="furikaeri">
+    <div class="furikaeri-title">せんせいの サインらん</div>
+    <div class="stamp-row">
+      <div class="stamp">よく<br>できました</div>
+      <div class="stamp">がんばり<br>ました</div>
+      <div class="stamp">また<br>やろう</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

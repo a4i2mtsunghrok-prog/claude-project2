@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>おかね① コインを みよう</title>
+<link rel="stylesheet" href="ws_style2.css">
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">🖨️ いんさつする</button>
+
+<!-- ===== 1まいめ ===== -->
+<div class="page">
+  <div class="ws-header">
+    <div class="ws-title">コインを みよう 🪙</div>
+    <div class="name-row">
+      <div class="name-field">なまえ <div class="name-line"></div></div>
+      <div class="name-field">ひ <div class="name-line" style="width:120px;"></div></div>
+    </div>
+  </div>
+
+  <div class="goal-box">コインが なんえんか わかるようになろう</div>
+
+  <!-- 問題1：コインの名前 -->
+  <div class="mondai">
+    <div class="mondai-num">もんだい 1</div>
+    <div class="mondai-text">なんえんですか？　した の [ ] に かこう</div>
+
+    <div style="display:flex; flex-wrap:wrap; gap:28px; justify-content:space-around; margin:20px 0;">
+
+      <div style="text-align:center;">
+        <div class="coin coin-1" style="width:90px;height:90px;font-size:18px;">１円</div>
+        <div style="margin-top:10px;">
+          <div style="border:3px solid #333; border-radius:8px; width:100px; height:52px; margin:0 auto; background:#fff;"></div>
+          <div style="font-size:20px; margin-top:4px; color:#555;">えん</div>
+        </div>
+      </div>
+
+      <div style="text-align:center;">
+        <div class="coin coin-10" style="width:90px;height:90px;font-size:18px;">１０円</div>
+        <div style="margin-top:10px;">
+          <div style="border:3px solid #333; border-radius:8px; width:100px; height:52px; margin:0 auto; background:#fff;"></div>
+          <div style="font-size:20px; margin-top:4px; color:#555;">えん</div>
+        </div>
+      </div>
+
+      <div style="text-align:center;">
+        <div class="coin coin-50" style="width:90px;height:90px;font-size:18px;">５０円</div>
+        <div style="margin-top:10px;">
+          <div style="border:3px solid #333; border-radius:8px; width:100px; height:52px; margin:0 auto; background:#fff;"></div>
+          <div style="font-size:20px; margin-top:4px; color:#555;">えん</div>
+        </div>
+      </div>
+
+      <div style="text-align:center;">
+        <div class="coin coin-100" style="width:90px;height:90px;font-size:18px;">１００円</div>
+        <div style="margin-top:10px;">
+          <div style="border:3px solid #333; border-radius:8px; width:100px; height:52px; margin:0 auto; background:#fff;"></div>
+          <div style="font-size:20px; margin-top:4px; color:#555;">えん</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 問題2：合計いくら？ -->
+  <div class="mondai">
+    <div class="mondai-num">もんだい 2</div>
+    <div class="mondai-text">
+      ぜんぶで なんえん？
+    </div>
+
+    <div style="margin:16px 0 8px;">
+      <div class="coin coin-10">１０円</div>
+      <div class="coin coin-10">１０円</div>
+      <div class="coin coin-10">１０円</div>
+      <span style="font-size:36px; margin:0 14px; vertical-align:middle;">→</span>
+      <span style="font-size:26px; vertical-align:middle;">ぜんぶで？</span>
+    </div>
+
+    <div class="answer-area">
+      <span class="answer-label">こたえ：</span>
+      <div class="answer-box-big"></div>
+      <span class="answer-unit">えん</span>
+    </div>
+  </div>
+
+  <div class="furikaeri">
+    <div class="furikaeri-title">ふりかえり　✓ しよう</div>
+    <div class="check-row"><div class="check-sq"></div> コインが なんえんか わかった</div>
+    <div class="check-row"><div class="check-sq"></div> けいさんが できた</div>
+    <div class="stamp-row">
+      <div class="stamp">よく<br>できました</div>
+      <div class="stamp">がんばり<br>ました</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 2まいめ ===== -->
+<div class="page">
+  <div class="ws-header">
+    <div class="ws-title">ちょうどの おかねを つくろう 🪙</div>
+    <div class="name-row">
+      <div class="name-field">なまえ <div class="name-line"></div></div>
+      <div class="name-field">ひ <div class="name-line" style="width:120px;"></div></div>
+    </div>
+  </div>
+
+  <div class="goal-box">ねだんと おなじ おかねを つくろう</div>
+
+  <div class="hint">10えん コインが 10まいで 100えん</div>
+
+  <div class="mondai">
+    <div class="mondai-num">もんだい 3</div>
+    <div class="mondai-text">
+      <span class="big">30えん</span> を つくろう。<br>
+      10えん コインを なんまい つかう？
+    </div>
+    <div style="margin:16px 0;">
+      <div class="coin coin-10">１０円</div>
+      <span style="font-size:30px; margin:0 10px; vertical-align:middle;">×</span>
+      <div style="display:inline-block; border:3px solid #333; border-radius:8px; width:80px; height:56px; vertical-align:middle; background:#fff;"></div>
+      <span style="font-size:30px; margin:0 10px; vertical-align:middle;">まい</span>
+    </div>
+  </div>
+
+  <div class="mondai">
+    <div class="mondai-num">もんだい 4</div>
+    <div class="mondai-text">
+      <span class="big">50えん</span> を つくろう。<br>
+      10えん コインを なんまい つかう？
+    </div>
+    <div style="margin:16px 0;">
+      <div class="coin coin-10">１０円</div>
+      <span style="font-size:30px; margin:0 10px; vertical-align:middle;">×</span>
+      <div style="display:inline-block; border:3px solid #333; border-radius:8px; width:80px; height:56px; vertical-align:middle; background:#fff;"></div>
+      <span style="font-size:30px; margin:0 10px; vertical-align:middle;">まい</span>
+    </div>
+  </div>
+
+  <div class="mondai">
+    <div class="mondai-num">もんだい 5</div>
+    <div class="mondai-text">
+      <span class="big">80えん</span> を つくろう。<br>
+      10えん コインを なんまい つかう？
+    </div>
+    <div style="margin:16px 0;">
+      <div class="coin coin-10">１０円</div>
+      <span style="font-size:30px; margin:0 10px; vertical-align:middle;">×</span>
+      <div style="display:inline-block; border:3px solid #333; border-radius:8px; width:80px; height:56px; vertical-align:middle; background:#fff;"></div>
+      <span style="font-size:30px; margin:0 10px; vertical-align:middle;">まい</span>
+    </div>
+  </div>
+
+  <div class="furikaeri">
+    <div class="furikaeri-title">せんせいの サインらん</div>
+    <div class="stamp-row">
+      <div class="stamp">よく<br>できました</div>
+      <div class="stamp">がんばり<br>ました</div>
+      <div class="stamp">また<br>やろう</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>おかね③ かいものリスト</title>
+<link rel="stylesheet" href="ws_style2.css">
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">🖨️ いんさつする</button>
+
+<!-- ===== 1まいめ ===== -->
+<div class="page">
+  <div class="ws-header">
+    <div class="ws-title">かいものリストを つくろう 🛒</div>
+    <div class="name-row">
+      <div class="name-field">なまえ <div class="name-line"></div></div>
+      <div class="name-field">ひ <div class="name-line" style="width:120px;"></div></div>
+    </div>
+  </div>
+
+  <div class="goal-box">かうものの ごうけいを けいさんしよう</div>
+
+  <!-- メニュー -->
+  <div style="background:#f1f8e9; border:3px solid #558b2f; border-radius:14px; padding:18px 20px; margin-bottom:24px;">
+    <div style="font-size:22px; font-weight:700; color:#33691e; margin-bottom:12px;">🏪 おみせの メニュー</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:24px;">
+      <div>🍙 おにぎり　<strong>80えん</strong></div>
+      <div>🥤 ジュース　<strong>100えん</strong></div>
+      <div>🍞 パン　　　<strong>60えん</strong></div>
+      <div>🍵 お茶　　　<strong>90えん</strong></div>
+      <div>🍪 クッキー　<strong>50えん</strong></div>
+      <div>🍫 チョコ　　<strong>70えん</strong></div>
+    </div>
+  </div>
+
+  <div class="mondai">
+    <div class="mondai-num">もんだい 1</div>
+    <div class="mondai-text">
+      🍙 おにぎり と 🥤 ジュースを かいます。<br>
+      ぜんぶで なんえん？
+    </div>
+    <div class="shiki">
+      <div class="shiki-box shiki-box-wide" style="display:flex;align-items:center;justify-content:center;font-size:22px;">80</div>
+      <span>＋</span>
+      <div class="shiki-box shiki-box-wide" style="display:flex;align-items:center;justify-content:center;font-size:22px;">100</div>
+      <span>＝</span>
+      <div class="shiki-box shiki-box-wide"></div>
+      <span class="answer-unit">えん</span>
+    </div>
+    <div class="answer-area">
+      <span class="answer-label">ごうけい：</span>
+      <div class="answer-box-big"></div>
+      <span class="answer-unit">えん</span>
+    </div>
+  </div>
+
+  <div class="mondai">
+    <div class="mondai-num">もんだい 2</div>
+    <div class="mondai-text">
+      🍞 パン と 🍵 お茶を かいます。<br>
+      ぜんぶで なんえん？
+    </div>
+    <div class="shiki">
+      <div class="shiki-box shiki-box-wide"></div>
+      <span>＋</span>
+      <div class="shiki-box shiki-box-wide"></div>
+      <span>＝</span>
+      <div class="shiki-box shiki-box-wide"></div>
+      <span class="answer-unit">えん</span>
+    </div>
+    <div class="answer-area">
+      <span class="answer-label">ごうけい：</span>
+      <div class="answer-box-big"></div>
+      <span class="answer-unit">えん</span>
+    </div>
+  </div>
+
+  <div class="furikaeri">
+    <div class="furikaeri-title">ふりかえり　✓ しよう</div>
+    <div class="check-row"><div class="check-sq"></div> ねだんを たしざんできた</div>
+    <div class="check-row"><div class="check-sq"></div> ごうけいが わかった</div>
+    <div class="stamp-row">
+      <div class="stamp">よく<br>できました</div>
+      <div class="stamp">がんばり<br>ました</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 2まいめ ===== -->
+<div class="page">
+  <div class="ws-header">
+    <div class="ws-title">100えんで かえる？ 🪙</div>
+    <div class="name-row">
+      <div class="name-field">なまえ <div class="name-line"></div></div>
+      <div class="name-field">ひ <div class="name-line" style="width:120px;"></div></div>
+    </div>
+  </div>
+
+  <div class="goal-box">100えんで かえるか かんがえよう</div>
+
+  <div style="background:#f1f8e9; border:3px solid #558b2f; border-radius:14px; padding:18px 20px; margin-bottom:24px;">
+    <div style="font-size:22px; font-weight:700; color:#33691e; margin-bottom:12px;">🏪 おみせの メニュー</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:24px;">
+      <div>🍙 おにぎり　<strong>80えん</strong></div>
+      <div>🥤 ジュース　<strong>100えん</strong></div>
+      <div>🍞 パン　　　<strong>60えん</strong></div>
+      <div>🍵 お茶　　　<strong>90えん</strong></div>
+      <div>🍪 クッキー　<strong>50えん</strong></div>
+      <div>🍫 チョコ　　<strong>70えん</strong></div>
+    </div>
+  </div>
+
+  <div class="mondai">
+    <div class="mondai-num">もんだい 3</div>
+    <div class="mondai-text">
+      もっているお金：<span class="big">100えん</span><br>
+      🍪 クッキー と 🍫 チョコを かいたいです。<br>
+      かえますか？
+    </div>
+    <div class="shiki" style="font-size:24px;">
+      50 ＋ 70 ＝
+      <div class="shiki-box shiki-box-wide"></div>
+      えん
+    </div>
+    <div style="display:flex; gap:24px; margin-top:18px;">
+      <div style="border:4px solid #2e7d32; border-radius:12px; padding:14px 28px; font-size:28px; font-weight:900; color:#2e7d32;">⭕ かえる</div>
+      <div style="border:4px solid #c62828; border-radius:12px; padding:14px 28px; font-size:28px; font-weight:900; color:#c62828;">❌ かえない</div>
+    </div>
+  </div>
+
+  <div class="mondai">
+    <div class="mondai-num">もんだい 4</div>
+    <div class="mondai-text">
+      もっているお金：<span class="big">100えん</span><br>
+      すきなものを <strong>2つ</strong> えらんで ごうけいを かこう。<br>
+      100えんで かえますか？
+    </div>
+    <div style="border:3px solid #ccc; border-radius:10px; padding:16px; background:#fff; font-size:24px; line-height:2.2;">
+      えらんだもの①：<div style="display:inline-block; border-bottom:2px solid #333; width:180px; vertical-align:bottom;"></div><br>
+      えらんだもの②：<div style="display:inline-block; border-bottom:2px solid #333; width:180px; vertical-align:bottom;"></div><br>
+      ごうけい：<div style="display:inline-block; border-bottom:2px solid #333; width:100px; vertical-align:bottom;"></div> えん
+    </div>
+    <div style="display:flex; gap:24px; margin-top:16px;">
+      <div style="border:4px solid #2e7d32; border-radius:12px; padding:14px 28px; font-size:28px; font-weight:900; color:#2e7d32;">⭕ かえる</div>
+      <div style="border:4px solid #c62828; border-radius:12px; padding:14px 28px; font-size:28px; font-weight:900; color:#c62828;">❌ かえない</div>
+    </div>
+  </div>
+
+  <div class="furikaeri">
+    <div class="furikaeri-title">せんせいの サインらん</div>
+    <div class="stamp-row">
+      <div class="stamp">よく<br>できました</div>
+      <div class="stamp">がんばり<br>ました</div>
+      <div class="stamp">また<br>やろう</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

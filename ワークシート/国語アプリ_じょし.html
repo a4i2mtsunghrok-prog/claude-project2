@@ -39,10 +39,10 @@ h1 {
   justify-content: center;
 }
 .level-btn {
-  padding: 10px 24px;
+  padding: 10px 20px;
   border: 3px solid #1565c0;
   border-radius: 30px;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
   background: #fff;
   color: #1565c0;
@@ -51,6 +51,14 @@ h1 {
 }
 .level-btn.active {
   background: #1565c0;
+  color: #fff;
+}
+.level-btn.lv4 {
+  border-color: #7b1fa2;
+  color: #7b1fa2;
+}
+.level-btn.lv4.active {
+  background: #7b1fa2;
   color: #fff;
 }
 
@@ -70,7 +78,7 @@ h1 {
   background: #fff;
   border-radius: 24px;
   padding: 32px;
-  max-width: 600px;
+  max-width: 620px;
   width: 100%;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
   text-align: center;
@@ -94,10 +102,10 @@ h1 {
 .q-num { font-size: 18px; color: #888; margin-bottom: 10px; }
 
 .sentence {
-  font-size: 38px;
+  font-size: 34px;
   font-weight: 700;
-  line-height: 2;
-  margin: 20px 0;
+  line-height: 2.2;
+  margin: 16px 0;
   color: #222;
 }
 .blank {
@@ -108,8 +116,8 @@ h1 {
   border-radius: 12px;
   background: #e3f2fd;
   vertical-align: middle;
-  margin: 0 6px;
-  font-size: 40px;
+  margin: 0 4px;
+  font-size: 38px;
   font-weight: 900;
   line-height: 54px;
   text-align: center;
@@ -119,21 +127,29 @@ h1 {
 .blank.correct { background: #c8e6c9; border-color: #43a047; color: #2e7d32; }
 .blank.wrong   { background: #ffcdd2; border-color: #e53935; color: #c62828; }
 
-.emoji-hint { font-size: 64px; margin-bottom: 8px; }
+.emoji-hint { font-size: 56px; margin-bottom: 4px; }
+.level-label {
+  font-size: 14px;
+  font-weight: 700;
+  padding: 3px 12px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-bottom: 10px;
+}
 
 /* 選択ボタン */
 .choices {
   display: flex;
-  gap: 16px;
+  gap: 12px;
   justify-content: center;
   flex-wrap: wrap;
-  margin-top: 24px;
+  margin-top: 20px;
 }
 .choice {
-  width: 100px;
-  height: 100px;
-  border-radius: 20px;
-  font-size: 52px;
+  width: 90px;
+  height: 90px;
+  border-radius: 18px;
+  font-size: 46px;
   font-weight: 900;
   border: 4px solid;
   cursor: pointer;
@@ -146,6 +162,8 @@ h1 {
 .choice-ha { background: #fff9c4; border-color: #f9a825; color: #e65100; }
 .choice-wo { background: #e3f2fd; border-color: #42a5f5; color: #1565c0; }
 .choice-ni { background: #e8f5e9; border-color: #66bb6a; color: #2e7d32; }
+.choice-mo { background: #fce4ec; border-color: #f48fb1; color: #c2185b; }
+.choice-de { background: #ede7f6; border-color: #9575cd; color: #4527a0; }
 .choice.disabled { opacity: 0.4; cursor: default; pointer-events: none; }
 .choice.shake { animation: shake 0.3s; }
 @keyframes shake {
@@ -156,10 +174,10 @@ h1 {
 
 /* フィードバック */
 .feedback {
-  font-size: 30px;
+  font-size: 28px;
   font-weight: 700;
-  min-height: 48px;
-  margin-top: 18px;
+  min-height: 44px;
+  margin-top: 16px;
   text-align: center;
 }
 .feedback.correct-msg { color: #2e7d32; }
@@ -197,58 +215,49 @@ h1 {
 .result-score { font-size: 28px; margin-bottom: 28px; }
 .result-score span { font-size: 48px; font-weight: 900; color: #e65100; }
 .retry-btn {
-  padding: 16px 48px;
+  padding: 16px 40px;
   background: #e65100;
   color: #fff;
   border: none;
   border-radius: 14px;
-  font-size: 26px;
+  font-size: 24px;
   font-weight: 700;
   cursor: pointer;
   font-family: inherit;
   margin: 6px;
 }
-.retry-btn:hover { background: #bf360c; }
 .home-btn {
-  padding: 16px 48px;
+  padding: 16px 40px;
   background: #1565c0;
   color: #fff;
   border: none;
   border-radius: 14px;
-  font-size: 26px;
+  font-size: 24px;
   font-weight: 700;
   cursor: pointer;
   font-family: inherit;
   margin: 6px;
 }
-
-/* 星アニメ */
-.stars {
-  font-size: 40px;
-  letter-spacing: 8px;
-  margin: 10px 0;
-}
+.stars { font-size: 40px; letter-spacing: 8px; margin: 10px 0; }
 </style>
 </head>
 <body>
 
 <h1>じょしを れんしゅうしよう ✏️</h1>
-<div class="subtitle">は・を・に　を えらぼう</div>
+<div class="subtitle">は・を・に・も・で　を えらぼう</div>
 
-<!-- レベル選択 -->
 <div class="level-bar">
-  <button class="level-btn active" onclick="setLevel(1)">⭐ レベル１（は）</button>
-  <button class="level-btn" onclick="setLevel(2)">⭐⭐ レベル２（は・を）</button>
-  <button class="level-btn" onclick="setLevel(3)">⭐⭐⭐ レベル３（は・を・に）</button>
+  <button class="level-btn active" onclick="setLevel(1)">⭐ Lv1（は）</button>
+  <button class="level-btn" onclick="setLevel(2)">⭐⭐ Lv2（は・を）</button>
+  <button class="level-btn" onclick="setLevel(3)">⭐⭐⭐ Lv3（は・を・に）</button>
+  <button class="level-btn lv4" onclick="setLevel(4)">👑 Lv4（は・を・に・も・で）</button>
 </div>
 
-<!-- スコア -->
 <div class="score-bar">
   <div>せいかい：<span id="correct-count">0</span></div>
   <div>もんだい：<span id="total-count">0</span> / <span id="total-max">5</span></div>
 </div>
 
-<!-- 問題カード -->
 <div class="card" id="quiz-card">
   <div class="progress-bar-wrap">
     <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
@@ -261,55 +270,65 @@ h1 {
   <button class="next-btn" id="next-btn" onclick="nextQuestion()">つぎへ →</button>
 </div>
 
-<!-- 結果カード -->
 <div class="result-card" id="result-card">
   <div class="result-emoji" id="result-emoji">🎉</div>
   <div class="stars" id="result-stars"></div>
   <div class="result-title" id="result-title">おわったよ！</div>
-  <div class="result-score">
-    <span id="result-score-num">0</span> もん せいかい！
-  </div>
+  <div class="result-score"><span id="result-score-num">0</span> もん せいかい！</div>
   <div id="result-msg" style="font-size:22px; color:#555; margin-bottom:24px;"></div>
   <button class="retry-btn" onclick="startQuiz()">もういちど やる</button>
   <button class="home-btn" onclick="setLevel(currentLevel)">はじめにもどる</button>
 </div>
 
 <script>
-// 問題データ
 const questions = {
-  // レベル1：「は」のみ
+  // レベル1：「は」のみ・長めの文
   1: [
-    { emoji:'🐱', before:'ねこ', joshi:'は', after:'かわいい' },
-    { emoji:'🍎', before:'りんご', joshi:'は', after:'あかい' },
-    { emoji:'☀️', before:'おひさま', joshi:'は', after:'あかるい' },
-    { emoji:'🐶', before:'いぬ', joshi:'は', after:'おおきい' },
-    { emoji:'🌸', before:'はな', joshi:'は', after:'きれい' },
-    { emoji:'🎒', before:'わたし', joshi:'は', after:'がくせいです' },
-    { emoji:'🍌', before:'ばなな', joshi:'は', after:'あまい' },
+    { emoji:'🐱', before:'まいにち そとで あそぶ ねこ', joshi:'は', after:'とても げんきです' },
+    { emoji:'🍎', before:'かごの なかの りんご', joshi:'は', after:'あかくて おいしそうです' },
+    { emoji:'☀️', before:'きょうの おてんき', joshi:'は', after:'はれで あたたかい' },
+    { emoji:'🐶', before:'となりの いえの いぬ', joshi:'は', after:'とても おおきくて こわそうです' },
+    { emoji:'🌸', before:'こうえんに さいている はな', joshi:'は', after:'きれいで いいにおいが します' },
+    { emoji:'🎒', before:'わたしの すきな きょうか', joshi:'は', after:'たいいくと おんがくです' },
+    { emoji:'🍌', before:'つくえの うえの ばなな', joshi:'は', after:'まだ あおくて かたい' },
+    { emoji:'🏫', before:'わたしたちの がっこう', joshi:'は', after:'やまの ちかくに あります' },
   ],
-  // レベル2：「は・を」
+  // レベル2：「は・を」・長めの文
   2: [
-    { emoji:'🐱', before:'ねこ', joshi:'は', after:'かわいい' },
-    { emoji:'🍎', before:'りんご', joshi:'を', after:'たべる' },
-    { emoji:'📚', before:'ほん', joshi:'を', after:'よむ' },
-    { emoji:'☀️', before:'そら', joshi:'は', after:'あおい' },
-    { emoji:'🎵', before:'うた', joshi:'を', after:'うたう' },
-    { emoji:'🐶', before:'いぬ', joshi:'は', after:'はしる' },
-    { emoji:'💧', before:'みず', joshi:'を', after:'のむ' },
-    { emoji:'🌸', before:'はな', joshi:'は', after:'きれい' },
+    { emoji:'📚', before:'わたし は まいばん ねる まえに ほん', joshi:'を', after:'よんでいます' },
+    { emoji:'🍳', before:'おかあさん は まいにち あさごはん', joshi:'を', after:'つくってくれます' },
+    { emoji:'🐶', before:'となりの いえの いぬ', joshi:'は', after:'まいあさ こうえんで さんぽします' },
+    { emoji:'🎵', before:'ともだちと いっしょに おきにいりの うた', joshi:'を', after:'たのしく うたいました' },
+    { emoji:'☀️', before:'はるに なると そらの いろ', joshi:'は', after:'もっと あおく きれいに なります' },
+    { emoji:'💧', before:'うんどうの あとは かならず みず', joshi:'を', after:'たくさん のんでください' },
+    { emoji:'🌸', before:'おねえちゃん', joshi:'は', after:'まいしゅう ピアノの れんしゅうを しています' },
+    { emoji:'🎨', before:'びじゅつの じかんに じぶんの すきな え', joshi:'を', after:'かきました' },
   ],
-  // レベル3：「は・を・に」
+  // レベル3：「は・を・に」・長めの文
   3: [
-    { emoji:'🏫', before:'がっこう', joshi:'に', after:'いく' },
-    { emoji:'🍎', before:'りんご', joshi:'を', after:'たべる' },
-    { emoji:'🐱', before:'ねこ', joshi:'は', after:'かわいい' },
-    { emoji:'🚌', before:'バス', joshi:'に', after:'のる' },
-    { emoji:'📚', before:'ほん', joshi:'を', after:'よむ' },
-    { emoji:'🏠', before:'いえ', joshi:'に', after:'かえる' },
-    { emoji:'☀️', before:'そら', joshi:'は', after:'あおい' },
-    { emoji:'🎵', before:'うた', joshi:'を', after:'うたう' },
-    { emoji:'🌳', before:'こうえん', joshi:'に', after:'あそびにいく' },
-    { emoji:'💧', before:'みず', joshi:'を', after:'のむ' },
+    { emoji:'🚌', before:'まいあさ バス', joshi:'に', after:'のって がっこうまで かよっています' },
+    { emoji:'🍎', before:'おひるごはんに りんご', joshi:'を', after:'まるごと ひとつ たべました' },
+    { emoji:'🏠', before:'ゆうがた 5じ', joshi:'に', after:'かならず いえに かえります' },
+    { emoji:'📖', before:'としょかんで かりてきた ほん', joshi:'は', after:'とても おもしろくて よみやすかった' },
+    { emoji:'🌳', before:'にちようびに かぞくで ちかくの こうえん', joshi:'に', after:'あそびに いきました' },
+    { emoji:'🎒', before:'あした がっこう', joshi:'に', after:'もっていく ものを じゅんびしました' },
+    { emoji:'🐱', before:'むかし かっていた ねこ', joshi:'は', after:'もう 10さいを こえています' },
+    { emoji:'✉️', before:'おじいちゃん', joshi:'に', after:'てがみを かいて おくりました' },
+    { emoji:'🍳', before:'きのう よる おかあさんと いっしょに ばんごはん', joshi:'を', after:'つくりました' },
+    { emoji:'🚃', before:'とうきょう', joshi:'に', after:'いくには でんしゃが いちばん べんりです' },
+  ],
+  // レベル4：「は・を・に・も・で」・難しい文
+  4: [
+    { emoji:'🚌', before:'きょうは バス', joshi:'で', after:'えきまで いきました' },
+    { emoji:'📚', before:'としょかん', joshi:'で', after:'しずかに しゅくだいを しました' },
+    { emoji:'🐶', before:'うちの いぬ', joshi:'も', after:'ねこと なかよく あそんでいます' },
+    { emoji:'✂️', before:'はさみ', joshi:'で', after:'かみを きれいに きりました' },
+    { emoji:'👦', before:'おとうと', joshi:'も', after:'わたしと おなじ がっこうに かよっています' },
+    { emoji:'🏪', before:'ちかくの コンビニ', joshi:'で', after:'おかしを かってきました' },
+    { emoji:'🎵', before:'となりの クラスの こ', joshi:'も', after:'おなじ うたを れんしゅうしていました' },
+    { emoji:'✏️', before:'えんぴつ', joshi:'で', after:'ていねいに じを かきました' },
+    { emoji:'👴', before:'おじいちゃん', joshi:'も', after:'わかいころ やきゅうを していたそうです' },
+    { emoji:'🏫', before:'きょうしつ', joshi:'で', after:'みんなで たのしく はなしあいました' },
   ],
 };
 
@@ -317,9 +336,16 @@ const choicesByLevel = {
   1: ['は'],
   2: ['は', 'を'],
   3: ['は', 'を', 'に'],
+  4: ['は', 'を', 'に', 'も', 'で'],
 };
 
-const choiceClass = { 'は':'choice-ha', 'を':'choice-wo', 'に':'choice-ni' };
+const choiceClass = {
+  'は': 'choice-ha',
+  'を': 'choice-wo',
+  'に': 'choice-ni',
+  'も': 'choice-mo',
+  'で': 'choice-de',
+};
 
 let currentLevel = 1;
 let currentQ = 0;
@@ -329,7 +355,7 @@ let answered = false;
 
 function setLevel(lv) {
   currentLevel = lv;
-  document.querySelectorAll('.level-btn').forEach((b,i) => {
+  document.querySelectorAll('.level-btn').forEach((b, i) => {
     b.classList.toggle('active', i === lv - 1);
   });
   startQuiz();
@@ -372,12 +398,10 @@ function showQuestion() {
   document.getElementById('feedback').className = 'feedback';
   document.getElementById('next-btn').style.display = 'none';
 
-  // 文の表示
   document.getElementById('sentence-display').innerHTML =
     `${q.before} <span class="blank" id="blank-span">　</span> ${q.after}`;
 
-  // 選択肢
-  const choices = choicesByLevel[currentLevel];
+  const choices = shuffle(choicesByLevel[currentLevel]);
   const el = document.getElementById('choices');
   el.innerHTML = '';
   choices.forEach(c => {
@@ -395,9 +419,7 @@ function handleAnswer(selected, correct, btn) {
 
   const blank = document.getElementById('blank-span');
   const feedback = document.getElementById('feedback');
-  const allBtns = document.querySelectorAll('.choice');
-
-  allBtns.forEach(b => b.classList.add('disabled'));
+  document.querySelectorAll('.choice').forEach(b => b.classList.add('disabled'));
 
   if (selected === correct) {
     blank.textContent = correct;
@@ -454,7 +476,6 @@ function showResult() {
   document.getElementById('result-msg').textContent = msg;
 }
 
-// 初期起動
 startQuiz();
 </script>
 </body>

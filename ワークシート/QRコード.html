@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QRコード一覧</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'ヒラギノ丸ゴ Pro', 'Hiragino Maru Gothic Pro', 'Meiryo', sans-serif;
+  background: #f5f5f5;
+  padding: 24px 16px;
+}
+@media print {
+  body { background: #fff; padding: 8px; }
+  .no-print { display: none; }
+  .section { page-break-inside: avoid; }
+}
+h1 {
+  text-align: center;
+  font-size: 26px;
+  color: #1565c0;
+  margin-bottom: 24px;
+}
+.print-btn {
+  display: block;
+  margin: 0 auto 30px;
+  padding: 12px 40px;
+  background: #1565c0;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 20px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.print-btn:hover { background: #0d47a1; }
+.section { margin-bottom: 32px; }
+.section-title {
+  font-size: 20px;
+  font-weight: 900;
+  color: #fff;
+  padding: 8px 20px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  display: inline-block;
+}
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 20px 16px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  width: 190px;
+}
+.card-icon { font-size: 32px; margin-bottom: 6px; }
+.card-title { font-size: 15px; font-weight: 900; color: #222; margin-bottom: 4px; line-height: 1.4; }
+.card-desc { font-size: 13px; color: #888; margin-bottom: 12px; line-height: 1.4; }
+.qr-wrap { display: flex; justify-content: center; }
+</style>
+</head>
+<body>
+
+<h1>📱 QRコード いちらん</h1>
+<button class="print-btn no-print" onclick="window.print()">🖨️ いんさつする</button>
+
+<!-- 数学 標準版 -->
+<div class="section">
+  <div class="section-title" style="background:#1565c0;">📐 すうがく（標準版）</div>
+  <div class="cards" id="math-standard"></div>
+</div>
+
+<!-- 数学 やさしい版 -->
+<div class="section">
+  <div class="section-title" style="background:#e65100;">📐 すうがく（やさしい版）</div>
+  <div class="cards" id="math-easy"></div>
+</div>
+
+<!-- 国語 -->
+<div class="section">
+  <div class="section-title" style="background:#2e7d32;">📖 こくご（じょし）</div>
+  <div class="cards" id="japanese"></div>
+</div>
+
+<script>
+const base = 'https://a4i2mtsunghrok-prog.github.io/claude-project2/'
+           + encodeURIComponent('ワークシート') + '/';
+
+const data = {
+  'math-standard': [
+    { icon:'📚', title:'もくじ', desc:'標準版 目次', file:'00_もくじ.html' },
+    { icon:'🪙', title:'お金①', desc:'硬貨とお札', file:'01_お金_硬貨とお札.html' },
+    { icon:'🛍️', title:'お金②', desc:'おつり', file:'02_お金_おつり.html' },
+    { icon:'🛒', title:'お金③', desc:'予算で買い物', file:'03_お金_予算で買い物.html' },
+    { icon:'🕐', title:'時間④', desc:'逆算', file:'04_時間_逆算.html' },
+    { icon:'💼', title:'仕事⑤', desc:'給料', file:'05_仕事_給料.html' },
+  ],
+  'math-easy': [
+    { icon:'📚', title:'もくじ', desc:'やさしい版 目次', file:'新00_もくじ.html' },
+    { icon:'🪙', title:'おかね①', desc:'コインをみよう', file:'新01_おかね_コインをみよう.html' },
+    { icon:'🛍️', title:'おかね②', desc:'おつり', file:'新02_おかね_おつり.html' },
+    { icon:'🛒', title:'おかね③', desc:'かいものリスト', file:'新03_おかね_かいものリスト.html' },
+    { icon:'🕐', title:'じかん④', desc:'なんじ', file:'新04_じかん_なんじ.html' },
+    { icon:'💼', title:'しごと⑤', desc:'きゅうりょう', file:'新05_しごと_きゅうりょう.html' },
+  ],
+  'japanese': [
+    { icon:'✏️', title:'れんしゅうアプリ', desc:'は・を・に クイズ', file:'国語アプリ_じょし.html' },
+    { icon:'📝', title:'ワークシート①', desc:'じょし「は」', file:'国語01_じょし_は.html' },
+  ],
+};
+
+Object.entries(data).forEach(([sectionId, items]) => {
+  const container = document.getElementById(sectionId);
+  items.forEach((item, i) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="card-icon">${item.icon}</div>
+      <div class="card-title">${item.title}</div>
+      <div class="card-desc">${item.desc}</div>
+      <div class="qr-wrap"><div id="qr-${sectionId}-${i}"></div></div>
+    `;
+    container.appendChild(card);
+    const url = base + encodeURIComponent(item.file);
+    new QRCode(document.getElementById(`qr-${sectionId}-${i}`), {
+      text: url,
+      width: 150,
+      height: 150,
+      colorDark: '#000',
+      colorLight: '#fff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  });
+});
+</script>
+</body>
+</html>

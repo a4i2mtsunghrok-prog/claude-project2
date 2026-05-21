@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3ごぶん じょしを えらぼう</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'ヒラギノ丸ゴ Pro', 'Hiragino Maru Gothic Pro', 'Meiryo', sans-serif;
+  background: linear-gradient(135deg, #e8f5e9 0%, #e3f2fd 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 30px;
+  font-weight: 900;
+  color: #1b5e20;
+  text-align: center;
+  margin-bottom: 6px;
+}
+.subtitle {
+  font-size: 18px;
+  color: #555;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.score-bar {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 16px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #333;
+}
+.score-bar span { color: #1b5e20; }
+
+.card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 28px 24px;
+  max-width: 700px;
+  width: 100%;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.progress-bar-wrap {
+  background: #e0e0e0;
+  border-radius: 10px;
+  height: 14px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: #66bb6a;
+  border-radius: 10px;
+  transition: width 0.3s;
+}
+
+.q-num { font-size: 18px; color: #888; margin-bottom: 16px; }
+
+/* 3語文 ビジュアル */
+.sentence-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 16px 0 12px;
+}
+
+.word-card {
+  background: #f9fbe7;
+  border: 2px solid #c5e1a5;
+  border-radius: 18px;
+  padding: 12px 18px;
+  text-align: center;
+  min-width: 84px;
+}
+.word-card.verb {
+  background: #e8eaf6;
+  border-color: #9fa8da;
+}
+.word-emoji { font-size: 42px; display: block; }
+.word-text { font-size: 19px; font-weight: 700; color: #333; display: block; margin-top: 4px; }
+
+.particle-blank {
+  width: 62px;
+  height: 62px;
+  border: 4px solid #bdbdbd;
+  border-radius: 16px;
+  background: #f5f5f5;
+  font-size: 30px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  position: relative;
+}
+.particle-blank.active {
+  border-color: #2e7d32;
+  background: #e8f5e9;
+  color: #2e7d32;
+  animation: blink 1.2s infinite;
+}
+@keyframes blink {
+  0%,100% { box-shadow: 0 0 0 4px rgba(46,125,50,0.25); }
+  50%      { box-shadow: 0 0 0 8px rgba(46,125,50,0.08); }
+}
+.particle-blank.correct-filled {
+  border-color: #43a047;
+  background: #c8e6c9;
+  color: #1b5e20;
+  animation: none;
+}
+.particle-blank.wrong-filled {
+  border-color: #e53935;
+  background: #ffcdd2;
+  color: #b71c1c;
+  animation: none;
+}
+
+/* ステップ表示 */
+.step-label {
+  font-size: 17px;
+  font-weight: 700;
+  color: #888;
+  margin: 4px 0 14px;
+  min-height: 28px;
+  transition: color 0.2s;
+}
+.step-label.active-lbl { color: #2e7d32; }
+
+/* 選択肢 */
+.choices {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 6px 0 16px;
+}
+.choice {
+  width: 82px;
+  height: 82px;
+  border-radius: 20px;
+  font-size: 42px;
+  font-weight: 900;
+  border: 4px solid;
+  cursor: pointer;
+  transition: transform 0.1s, opacity 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.choice:active { transform: scale(0.91); }
+.choice-ha { background: #fff9c4; border-color: #f9a825; color: #e65100; }
+.choice-ga { background: #fce4ec; border-color: #f48fb1; color: #c2185b; }
+.choice-wo { background: #e3f2fd; border-color: #42a5f5; color: #1565c0; }
+.choice-ni { background: #e8f5e9; border-color: #66bb6a; color: #2e7d32; }
+.choice.disabled { opacity: 0.3; cursor: default; pointer-events: none; }
+.choice.shake { animation: shake 0.35s; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)}
+  25%{transform:translateX(-9px)}
+  75%{transform:translateX(9px)}
+}
+
+.feedback {
+  font-size: 26px;
+  font-weight: 700;
+  min-height: 42px;
+  margin: 4px 0;
+  text-align: center;
+}
+.feedback.correct-msg { color: #2e7d32; }
+.feedback.wrong-msg   { color: #c62828; }
+.feedback.half-msg    { color: #e65100; }
+
+.next-btn {
+  display: none;
+  margin: 14px auto 0;
+  padding: 14px 52px;
+  background: #2e7d32;
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  font-size: 24px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+.next-btn:hover { background: #1b5e20; }
+
+/* 結果画面 */
+.result-card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 40px 32px;
+  max-width: 620px;
+  width: 100%;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+  text-align: center;
+  display: none;
+}
+.result-emoji { font-size: 80px; margin-bottom: 16px; }
+.result-title { font-size: 36px; font-weight: 900; color: #1b5e20; margin-bottom: 10px; }
+.result-score { font-size: 28px; margin-bottom: 20px; }
+.result-score span { font-size: 52px; font-weight: 900; color: #e65100; }
+.stars { font-size: 44px; letter-spacing: 8px; margin: 10px 0; }
+.result-msg { font-size: 22px; color: #555; margin-bottom: 28px; }
+.retry-btn {
+  padding: 16px 44px;
+  background: #e65100;
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  font-size: 24px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  margin: 6px;
+}
+.retry-btn:hover { background: #bf360c; }
+</style>
+</head>
+<body>
+
+<h1>3ごぶん じょしを えらぼう ✏️</h1>
+<div class="subtitle">は・が・を・に　を えらんでね</div>
+
+<div class="score-bar">
+  <div>せいかい：<span id="correct-count">0</span></div>
+  <div>もんだい：<span id="total-count">0</span> / <span id="total-max">5</span></div>
+</div>
+
+<div class="card" id="quiz-card">
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+  </div>
+  <div class="q-num" id="q-num">もんだい 1 / 5</div>
+
+  <div class="sentence-visual" id="sentence-visual"></div>
+
+  <div class="step-label active-lbl" id="step-label">① さいしょの □ に はいる じょしは？</div>
+
+  <div class="choices" id="choices"></div>
+  <div class="feedback" id="feedback"></div>
+  <button class="next-btn" id="next-btn" onclick="nextQuestion()">つぎへ →</button>
+</div>
+
+<div class="result-card" id="result-card">
+  <div class="result-emoji" id="result-emoji">🎉</div>
+  <div class="stars" id="result-stars"></div>
+  <div class="result-title" id="result-title">おわったよ！</div>
+  <div class="result-score"><span id="result-score-num">0</span> もん せいかい！</div>
+  <div class="result-msg" id="result-msg"></div>
+  <button class="retry-btn" onclick="startQuiz()">もういちど やる</button>
+</div>
+
+<script>
+// words: [word1, word2, word3(verb)]
+// emojis: [emoji1, emoji2, emoji3]
+// particles: [particle1(between w1-w2), particle2(between w2-w3)]
+const questions = [
+  { words: ['せんせい',       'ぼーる',   'なげる'],    emojis: ['🧑‍🏫','🏀','🤾'], particles: ['が','を'] },
+  { words: ['こども',         'こうえん', 'いく'],       emojis: ['👦','🌳','🚶'],  particles: ['が','に'] },
+  { words: ['おかあさん',     'ごはん',   'つくる'],     emojis: ['👩','🍚','👩‍🍳'], particles: ['は','を'] },
+  { words: ['いぬ',           'にわ',     'はしる'],     emojis: ['🐕','🏡','🏃'],  particles: ['が','を'] },
+  { words: ['おんなのこ',     'ほん',     'よむ'],       emojis: ['👧','📚','📖'],  particles: ['が','を'] },
+  { words: ['おとうさん',     'くるま',   'あらう'],     emojis: ['👨','🚗','🧼'],  particles: ['が','を'] },
+  { words: ['ねこ',           'はこ',     'はいる'],     emojis: ['🐱','📦','🚪'],  particles: ['が','に'] },
+  { words: ['おねえさん',     'がっこう', 'いく'],       emojis: ['👩','🏫','🚶'],  particles: ['は','に'] },
+  { words: ['うさぎ',         'にんじん', 'たべる'],     emojis: ['🐰','🥕','😋'],  particles: ['が','を'] },
+  { words: ['おじいちゃん',   'こうえん', 'いく'],       emojis: ['👴','🌳','🚶'],  particles: ['は','に'] },
+  { words: ['おとこのこ',     'ぼーる',   'ける'],       emojis: ['👦','⚽','🦶'],  particles: ['が','を'] },
+  { words: ['いぬ',           'こども',   'とびつく'],   emojis: ['🐕','👦','🐾'],  particles: ['が','に'] },
+  { words: ['とり',           'そら',     'とぶ'],       emojis: ['🐦','☁️','✈️'],  particles: ['が','を'] },
+  { words: ['おとうと',       'かいだん', 'のぼる'],     emojis: ['👦','🪜','⬆️'],  particles: ['が','を'] },
+  { words: ['おかあさん',     'みせ',     'いく'],       emojis: ['👩','🏪','🚶'],  particles: ['は','に'] },
+];
+
+const allChoices = ['は', 'が', 'を', 'に'];
+const choiceClass = { 'は':'choice-ha', 'が':'choice-ga', 'を':'choice-wo', 'に':'choice-ni' };
+
+let currentQ = 0;
+let correctCount = 0;
+let quizData = [];
+let currentBlank = 0;
+let blankAnswered = [false, false];
+let blankCorrect = [false, false];
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startQuiz() {
+  quizData = shuffle(questions).slice(0, 5);
+  currentQ = 0;
+  correctCount = 0;
+  document.getElementById('quiz-card').style.display = 'block';
+  document.getElementById('result-card').style.display = 'none';
+  document.getElementById('correct-count').textContent = 0;
+  document.getElementById('total-count').textContent = 0;
+  document.getElementById('total-max').textContent = quizData.length;
+  showQuestion();
+}
+
+function showQuestion() {
+  currentBlank = 0;
+  blankAnswered = [false, false];
+  blankCorrect = [false, false];
+
+  const q = quizData[currentQ];
+  const total = quizData.length;
+
+  document.getElementById('q-num').textContent = `もんだい ${currentQ + 1} / ${total}`;
+  document.getElementById('progress-fill').style.width = `${(currentQ / total) * 100}%`;
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('next-btn').style.display = 'none';
+  setStepLabel(0);
+  renderSentence(q);
+  renderChoices();
+}
+
+function renderSentence(q) {
+  const [w1, w2, w3] = q.words;
+  const [e1, e2, e3] = q.emojis;
+
+  document.getElementById('sentence-visual').innerHTML = `
+    <div class="word-card">
+      <span class="word-emoji">${e1}</span>
+      <span class="word-text">${w1}</span>
+    </div>
+    <div class="particle-blank active" id="blank-0">？</div>
+    <div class="word-card">
+      <span class="word-emoji">${e2}</span>
+      <span class="word-text">${w2}</span>
+    </div>
+    <div class="particle-blank" id="blank-1">？</div>
+    <div class="word-card verb">
+      <span class="word-emoji">${e3}</span>
+      <span class="word-text">${w3}</span>
+    </div>
+  `;
+}
+
+function renderChoices() {
+  const el = document.getElementById('choices');
+  el.innerHTML = '';
+  shuffle(allChoices).forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = `choice ${choiceClass[c]}`;
+    btn.textContent = c;
+    btn.onclick = () => handleAnswer(c, btn);
+    el.appendChild(btn);
+  });
+}
+
+function setStepLabel(blankIdx) {
+  const label = document.getElementById('step-label');
+  if (blankIdx === 0) {
+    label.textContent = '① さいしょの □ に はいる じょしは？';
+  } else {
+    label.textContent = '② つぎの □ に はいる じょしは？';
+  }
+  label.className = 'step-label active-lbl';
+}
+
+function disableChoices() {
+  document.querySelectorAll('.choice').forEach(b => b.classList.add('disabled'));
+}
+function enableChoices() {
+  document.querySelectorAll('.choice').forEach(b => b.classList.remove('disabled'));
+}
+
+function handleAnswer(selected, btn) {
+  if (blankAnswered[currentBlank]) return;
+
+  const q = quizData[currentQ];
+  const correctP = q.particles[currentBlank];
+  blankAnswered[currentBlank] = true;
+  blankCorrect[currentBlank] = (selected === correctP);
+
+  const blankEl = document.getElementById(`blank-${currentBlank}`);
+  blankEl.classList.remove('active');
+
+  const feedback = document.getElementById('feedback');
+
+  if (selected === correctP) {
+    blankEl.textContent = selected;
+    blankEl.classList.add('correct-filled');
+    feedback.textContent = '⭕ せいかい！';
+    feedback.className = 'feedback correct-msg';
+  } else {
+    blankEl.textContent = correctP;
+    blankEl.classList.add('wrong-filled');
+    feedback.textContent = `❌ こたえは「${correctP}」だよ`;
+    feedback.className = 'feedback wrong-msg';
+    btn.classList.add('shake');
+  }
+
+  disableChoices();
+
+  if (currentBlank === 0) {
+    // 少し待ってから 2つ目のブランクへ
+    setTimeout(() => {
+      currentBlank = 1;
+      document.getElementById('blank-1').classList.add('active');
+      feedback.textContent = '';
+      feedback.className = 'feedback';
+      setStepLabel(1);
+      enableChoices();
+    }, 1100);
+  } else {
+    // 両方終わり → 採点
+    document.getElementById('total-count').textContent = currentQ + 1;
+    setTimeout(() => {
+      if (blankCorrect[0] && blankCorrect[1]) {
+        correctCount++;
+        document.getElementById('correct-count').textContent = correctCount;
+        feedback.textContent = '🎉 ふたつとも せいかい！すばらしい！';
+        feedback.className = 'feedback correct-msg';
+        document.getElementById('step-label').textContent = '';
+      } else if (blankCorrect[0] || blankCorrect[1]) {
+        feedback.textContent = '😊 おしい！こたえを かくにんしよう';
+        feedback.className = 'feedback half-msg';
+        document.getElementById('step-label').textContent = '';
+      } else {
+        feedback.textContent = '💪 こたえを かくにんしよう';
+        feedback.className = 'feedback';
+        document.getElementById('step-label').textContent = '';
+      }
+      document.getElementById('next-btn').style.display = 'block';
+    }, 700);
+  }
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ >= quizData.length) {
+    showResult();
+  } else {
+    showQuestion();
+  }
+}
+
+function showResult() {
+  document.getElementById('quiz-card').style.display = 'none';
+  document.getElementById('result-card').style.display = 'block';
+
+  const total = quizData.length;
+  const rate = correctCount / total;
+
+  let emoji, title, msg, stars;
+  if (rate === 1) {
+    emoji = '🎉'; title = 'かんぺき！すごい！'; stars = '⭐⭐⭐';
+    msg = 'ぜんもん せいかい！ よくできました！';
+  } else if (rate >= 0.6) {
+    emoji = '😊'; title = 'よくできました！'; stars = '⭐⭐';
+    msg = 'もういちど やってみよう！';
+  } else {
+    emoji = '💪'; title = 'がんばったね！'; stars = '⭐';
+    msg = 'もういちど れんしゅう しよう！';
+  }
+
+  document.getElementById('result-emoji').textContent = emoji;
+  document.getElementById('result-title').textContent = title;
+  document.getElementById('result-stars').textContent = stars;
+  document.getElementById('result-score-num').textContent = correctCount;
+  document.getElementById('result-msg').textContent = msg;
+}
+
+startQuiz();
+</script>
+</body>
+</html>

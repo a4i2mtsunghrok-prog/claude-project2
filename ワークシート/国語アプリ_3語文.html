@@ -168,6 +168,7 @@ h1 {
 .choice-ga { background: #fce4ec; border-color: #f48fb1; color: #c2185b; }
 .choice-wo { background: #e3f2fd; border-color: #42a5f5; color: #1565c0; }
 .choice-ni { background: #e8f5e9; border-color: #66bb6a; color: #2e7d32; }
+.choice-de { background: #ede7f6; border-color: #9575cd; color: #4527a0; }
 .choice.disabled { opacity: 0.3; cursor: default; pointer-events: none; }
 .choice.shake { animation: shake 0.35s; }
 @keyframes shake {
@@ -237,7 +238,7 @@ h1 {
 <body>
 
 <h1>3ごぶん じょしを えらぼう ✏️</h1>
-<div class="subtitle">は・が・を・に　を えらんでね</div>
+<div class="subtitle">が・を・に・で　を えらんでね</div>
 
 <div class="score-bar">
   <div>せいかい：<span id="correct-count">0</span></div>
@@ -287,10 +288,15 @@ const questions = [
   { words: ['とり',           'そら',     'とぶ'],       emojis: ['🐦','☁️','✈️'],  particles: ['が','を'] },
   { words: ['おとうと',       'かいだん', 'のぼる'],     emojis: ['👦','🪜','⬆️'],  particles: ['が','を'] },
   { words: ['おかあさん',     'みせ',     'いく'],       emojis: ['👩','🏪','🚶'],  particles: ['が','に'] },
+  { words: ['こども',         'こうえん', 'あそぶ'],     emojis: ['👦','🌳','😄'],  particles: ['が','で'] },
+  { words: ['せんせい',       'えんぴつ', 'かく'],       emojis: ['🧑‍🏫','✏️','📝'],  particles: ['が','で'] },
+  { words: ['おとこのこ',     'はさみ',   'きる'],       emojis: ['👦','✂️','📄'],  particles: ['が','で'] },
+  { words: ['ともだち',       'バス',     'いく'],       emojis: ['👫','🚌','🚶'],  particles: ['が','で'] },
+  { words: ['おにいさん',     'じてんしゃ','いく'],      emojis: ['👦','🚲','🚴'],  particles: ['が','で'] },
 ];
 
-const allChoices = ['が', 'を', 'に'];
-const choiceClass = { 'は':'choice-ha', 'が':'choice-ga', 'を':'choice-wo', 'に':'choice-ni' };
+const allChoices = ['が', 'を', 'に', 'で'];
+const choiceClass = { 'は':'choice-ha', 'が':'choice-ga', 'を':'choice-wo', 'に':'choice-ni', 'で':'choice-de' };
 
 let currentQ = 0;
 let correctCount = 0;

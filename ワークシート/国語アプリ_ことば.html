@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>ことばを ふやそう</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { overscroll-behavior: none; }
+  body {
+    font-family: "Hiragino Maru Gothic ProN", "Yu Gothic", "Comic Sans MS", sans-serif;
+    background: linear-gradient(135deg, #fff8e1 0%, #ffe0b2 100%);
+    min-height: 100vh;
+    padding: 16px;
+    user-select: none;
+    color: #333;
+  }
+  header {
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  h1 {
+    font-size: 2rem;
+    color: #e67e22;
+    margin-bottom: 12px;
+    text-shadow: 2px 2px 0 #fff;
+  }
+  .level-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+  .level-btn {
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    border: 3px solid #e67e22;
+    background: white;
+    color: #e67e22;
+    border-radius: 30px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: bold;
+    transition: all 0.2s;
+  }
+  .level-btn:active { transform: scale(0.95); }
+  .level-btn.active {
+    background: #e67e22;
+    color: white;
+  }
+  .sentence-area {
+    background: white;
+    border-radius: 24px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  .slots {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .slot {
+    width: 130px;
+    height: 160px;
+    border: 4px dashed #ccc;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #fafafa;
+    font-size: 1rem;
+    color: #999;
+    position: relative;
+    transition: all 0.3s;
+  }
+  .slot.filled {
+    border-style: solid;
+    border-color: transparent;
+    background: transparent;
+    animation: pop 0.4s;
+  }
+  @keyframes pop {
+    0% { transform: scale(0.6); }
+    60% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+  .slot-label {
+    font-size: 1.4rem;
+    margin-bottom: 6px;
+  }
+  .slot-hint {
+    font-size: 0.9rem;
+  }
+  .card {
+    width: 130px;
+    height: 160px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.15s;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+    padding: 8px;
+  }
+  .card:active { transform: scale(0.92); }
+  .card .emoji { font-size: 3.5rem; line-height: 1.1; }
+  .card .label { font-size: 1.3rem; margin-top: 6px; text-align: center; }
+  .card.person { background: #ffd6d6; color: #c0392b; }
+  .card.thing { background: #d6e8ff; color: #1f618d; }
+  .card.action { background: #fff3c4; color: #b9770e; }
+  .card.adjective { background: #d4edda; color: #1e7e34; }
+  .control-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
+  .control-btn {
+    padding: 16px 28px;
+    font-size: 1.3rem;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: bold;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: transform 0.15s;
+    min-width: 140px;
+  }
+  .control-btn:active { transform: scale(0.95); }
+  .read-btn { background: #3498db; }
+  .read-btn:disabled { background: #bdc3c7; cursor: not-allowed; box-shadow: none; }
+  .done-btn { background: #27ae60; }
+  .done-btn:disabled { background: #bdc3c7; cursor: not-allowed; box-shadow: none; }
+  .reset-btn { background: #95a5a6; }
+  .card-pool {
+    background: white;
+    border-radius: 24px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  .card-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .card-row:last-child { margin-bottom: 0; }
+  .row-label {
+    text-align: center;
+    font-size: 0.95rem;
+    color: #777;
+    margin-bottom: 6px;
+    font-weight: bold;
+  }
+  .praise-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.3);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+  }
+  .praise-overlay.show { display: flex; }
+  .praise {
+    background: linear-gradient(135deg, #f1c40f, #e67e22);
+    color: white;
+    padding: 40px 60px;
+    border-radius: 30px;
+    font-size: 2.5rem;
+    font-weight: bold;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    text-align: center;
+    animation: bounce-in 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  }
+  @keyframes bounce-in {
+    0% { transform: scale(0); }
+    70% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+  }
+  .sparkle {
+    position: absolute;
+    font-size: 2rem;
+    pointer-events: none;
+    animation: sparkle 1.2s ease-out forwards;
+  }
+  @keyframes sparkle {
+    0% { transform: translate(0, 0) scale(0); opacity: 1; }
+    100% { transform: translate(var(--dx), var(--dy)) scale(1.5); opacity: 0; }
+  }
+  footer {
+    text-align: center;
+    margin-top: 20px;
+    color: #999;
+    font-size: 0.85rem;
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>🌟 ことばを ふやそう 🌟</h1>
+  <div class="level-buttons">
+    <button class="level-btn active" data-level="1">レベル1<br><small>2ご文</small></button>
+    <button class="level-btn" data-level="2">レベル2<br><small>だれが</small></button>
+    <button class="level-btn" data-level="3">レベル3<br><small>どんな</small></button>
+  </div>
+</header>
+
+<div class="sentence-area">
+  <div class="slots" id="slots"></div>
+  <div class="control-buttons">
+    <button class="control-btn read-btn" id="read-btn" disabled>🔊 よんでみる</button>
+    <button class="control-btn reset-btn" id="reset-btn">🔄 やりなおす</button>
+    <button class="control-btn done-btn" id="done-btn" disabled>✨ できた！</button>
+  </div>
+</div>
+
+<div class="card-pool" id="card-pool"></div>
+
+<footer>
+  カードを タップして ことばを ならべよう
+</footer>
+
+<div class="praise-overlay" id="praise-overlay">
+  <div class="praise" id="praise">よくできました！🎉</div>
+</div>
+
+<script>
+const WORDS = {
+  person: [
+    {label: "ぼく", emoji: "👦"},
+    {label: "わたし", emoji: "👧"},
+    {label: "せんせい", emoji: "👨‍🏫"},
+    {label: "ともだち", emoji: "🧑‍🤝‍🧑"},
+    {label: "おかあさん", emoji: "👩"},
+    {label: "おとうさん", emoji: "👨"},
+  ],
+  thing: [
+    {label: "りんご", emoji: "🍎"},
+    {label: "ボール", emoji: "⚽"},
+    {label: "ジュース", emoji: "🧃"},
+    {label: "ほん", emoji: "📖"},
+    {label: "おにぎり", emoji: "🍙"},
+    {label: "バナナ", emoji: "🍌"},
+    {label: "ケーキ", emoji: "🍰"},
+    {label: "ぎゅうにゅう", emoji: "🥛"},
+  ],
+  action: [
+    {label: "たべる", emoji: "😋"},
+    {label: "のむ", emoji: "🥤"},
+    {label: "なげる", emoji: "🤾"},
+    {label: "よむ", emoji: "📚"},
+    {label: "みる", emoji: "👀"},
+    {label: "かく", emoji: "✏️"},
+  ],
+  adjective: [
+    {label: "おおきい", emoji: "🐘"},
+    {label: "ちいさい", emoji: "🐭"},
+    {label: "あまい", emoji: "🍯"},
+    {label: "つめたい", emoji: "🧊"},
+    {label: "あつい", emoji: "🔥"},
+    {label: "あかい", emoji: "🔴"},
+  ],
+};
+
+const TYPE_INFO = {
+  person:    { icon: '👤', label: 'だれが',   rowLabel: '👤 だれが' },
+  thing:     { icon: '📦', label: 'なに',     rowLabel: '📦 なに' },
+  action:    { icon: '⚡', label: 'どうする', rowLabel: '⚡ どうする' },
+  adjective: { icon: '🎨', label: 'どんな',   rowLabel: '🎨 どんな' },
+};
+
+const LEVELS = {
+  1: { slots: ['thing', 'action'],             poolTypes: ['thing', 'action'],             poolCount: 4 },
+  2: { slots: ['person', 'thing', 'action'],   poolTypes: ['person', 'thing', 'action'],   poolCount: 4 },
+  3: { slots: ['adjective', 'thing', 'action'],poolTypes: ['adjective', 'thing', 'action'],poolCount: 4 },
+};
+
+let currentLevel = 1;
+let filledSlots = [];
+
+const slotsEl     = document.getElementById('slots');
+const cardPoolEl  = document.getElementById('card-pool');
+const readBtn     = document.getElementById('read-btn');
+const resetBtn    = document.getElementById('reset-btn');
+const doneBtn     = document.getElementById('done-btn');
+const praiseOverlay = document.getElementById('praise-overlay');
+const praiseEl    = document.getElementById('praise');
+
+function pickRandom(arr, n) {
+  return [...arr].sort(() => Math.random() - 0.5).slice(0, n);
+}
+
+function createCardEl(word) {
+  const el = document.createElement('div');
+  el.className = `card ${word.type}`;
+  el.innerHTML = `<div class="emoji">${word.emoji}</div><div class="label">${word.label}</div>`;
+  return el;
+}
+
+function renderSlots() {
+  const config = LEVELS[currentLevel];
+  slotsEl.innerHTML = '';
+  config.slots.forEach((type, i) => {
+    const slot = document.createElement('div');
+    slot.className = 'slot';
+    const word = filledSlots[i];
+    if (word) {
+      slot.classList.add('filled');
+      const card = createCardEl(word);
+      card.onclick = () => { filledSlots[i] = null; renderSlots(); };
+      slot.appendChild(card);
+    } else {
+      const info = TYPE_INFO[type];
+      slot.innerHTML = `<div class="slot-label">${info.icon}</div><div class="slot-hint">${info.label}</div>`;
+    }
+    slotsEl.appendChild(slot);
+  });
+  const complete = filledSlots.every(s => s);
+  readBtn.disabled = !complete;
+  doneBtn.disabled = !complete;
+}
+
+function renderPool() {
+  const config = LEVELS[currentLevel];
+  cardPoolEl.innerHTML = '';
+  config.poolTypes.forEach(type => {
+    const labelEl = document.createElement('div');
+    labelEl.className = 'row-label';
+    labelEl.textContent = TYPE_INFO[type].rowLabel;
+    cardPoolEl.appendChild(labelEl);
+
+    const row = document.createElement('div');
+    row.className = 'card-row';
+    const cards = pickRandom(WORDS[type], config.poolCount);
+    cards.forEach(w => {
+      const word = {...w, type};
+      const card = createCardEl(word);
+      card.onclick = () => addToSlot(word);
+      row.appendChild(card);
+    });
+    cardPoolEl.appendChild(row);
+  });
+}
+
+function addToSlot(word) {
+  const config = LEVELS[currentLevel];
+  const slotIdx = config.slots.indexOf(word.type);
+  if (slotIdx === -1) return;
+  filledSlots[slotIdx] = word;
+  renderSlots();
+  speak(word.label);
+}
+
+function resetSlots() {
+  filledSlots = new Array(LEVELS[currentLevel].slots.length).fill(null);
+  renderSlots();
+}
+
+function speak(text) {
+  if (!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = 'ja-JP';
+  utt.rate = 0.85;
+  utt.pitch = 1.1;
+  speechSynthesis.speak(utt);
+}
+
+function readSentence() {
+  const text = filledSlots.filter(Boolean).map(s => s.label).join('、');
+  speak(text);
+}
+
+function showPraise() {
+  const messages = ['よくできました！🎉', 'すごい！⭐', 'はなまる！💮', 'すばらしい！✨', 'パーフェクト！🌈'];
+  praiseEl.textContent = messages[Math.floor(Math.random() * messages.length)];
+  praiseOverlay.classList.add('show');
+  readSentence();
+  setTimeout(() => speak('よくできました'), 1200);
+
+  // Sparkles
+  for (let i = 0; i < 12; i++) {
+    const sp = document.createElement('div');
+    sp.className = 'sparkle';
+    sp.textContent = ['⭐','✨','💫','🌟'][i % 4];
+    const angle = (i / 12) * Math.PI * 2;
+    sp.style.setProperty('--dx', Math.cos(angle) * 200 + 'px');
+    sp.style.setProperty('--dy', Math.sin(angle) * 200 + 'px');
+    sp.style.left = '50%';
+    sp.style.top = '50%';
+    praiseOverlay.appendChild(sp);
+    setTimeout(() => sp.remove(), 1300);
+  }
+
+  setTimeout(() => {
+    praiseOverlay.classList.remove('show');
+    resetSlots();
+    renderPool();
+  }, 2500);
+}
+
+document.querySelectorAll('.level-btn').forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentLevel = parseInt(btn.dataset.level);
+    resetSlots();
+    renderPool();
+  };
+});
+
+readBtn.onclick  = readSentence;
+resetBtn.onclick = resetSlots;
+doneBtn.onclick  = showPraise;
+
+// 音声合成の初期化（iPadなどで最初のタップが必要なため、ダミー再生）
+document.body.addEventListener('touchstart', function init() {
+  speechSynthesis.cancel();
+  document.body.removeEventListener('touchstart', init);
+}, { once: true });
+
+resetSlots();
+renderPool();
+</script>
+</body>
+</html>

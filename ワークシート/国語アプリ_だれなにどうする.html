@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>だれが なにを どうする</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'ヒラギノ丸ゴ Pro', 'Hiragino Maru Gothic Pro', 'Meiryo', sans-serif;
+  background: linear-gradient(135deg, #fff8e1 0%, #ffccbc 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 30px;
+  font-weight: 900;
+  color: #e65100;
+  text-align: center;
+  margin-bottom: 6px;
+}
+.subtitle {
+  font-size: 18px;
+  color: #666;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.score-bar {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 16px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #333;
+}
+.score-bar span { color: #e65100; }
+
+.card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 28px 22px;
+  max-width: 700px;
+  width: 100%;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.progress-bar-wrap {
+  background: #ffe0b2;
+  border-radius: 10px;
+  height: 14px;
+  margin-bottom: 18px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: #ff9800;
+  border-radius: 10px;
+  transition: width 0.3s;
+}
+
+.q-num { font-size: 17px; color: #888; margin-bottom: 10px; }
+
+.scene {
+  background: #fffde7;
+  border: 3px solid #ffe082;
+  border-radius: 20px;
+  padding: 16px;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 8px;
+}
+.scene-emoji { font-size: 64px; }
+.scene-arrow { font-size: 30px; color: #ffa726; font-weight: 900; }
+
+.q-label {
+  font-size: 28px;
+  font-weight: 900;
+  color: #d84315;
+  margin: 10px 0 12px;
+}
+
+.sentence-template {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 12px 0 16px;
+}
+.slot {
+  min-width: 130px;
+  padding: 12px 14px;
+  border: 3px dashed #ccc;
+  border-radius: 14px;
+  background: #fafafa;
+  color: #aaa;
+  font-size: 22px;
+  font-weight: 700;
+}
+.slot.active {
+  border-color: #ff9800;
+  background: #fff3e0;
+  color: #e65100;
+  border-style: solid;
+  animation: pulse 1.2s infinite;
+}
+.slot.filled {
+  border-style: solid;
+  border-color: #66bb6a;
+  background: #c8e6c9;
+  color: #1b5e20;
+}
+.particle {
+  font-size: 24px;
+  font-weight: 700;
+  color: #555;
+  padding: 0 4px;
+}
+@keyframes pulse {
+  0%,100% { box-shadow: 0 0 0 4px rgba(255,152,0,0.25); }
+  50%      { box-shadow: 0 0 0 8px rgba(255,152,0,0.08); }
+}
+
+.choices {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 12px 0;
+}
+.choice {
+  padding: 14px 22px;
+  background: #fff;
+  border: 4px solid #ffa726;
+  border-radius: 18px;
+  font-size: 24px;
+  font-weight: 800;
+  color: #e65100;
+  cursor: pointer;
+  transition: transform 0.1s, background 0.2s;
+  font-family: inherit;
+  min-width: 130px;
+}
+.choice:active { transform: scale(0.94); }
+.choice:hover:not(.disabled) { background: #fff3e0; }
+.choice.disabled { opacity: 0.35; pointer-events: none; }
+.choice.shake { animation: shake 0.35s; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)}
+  25%{transform:translateX(-9px)}
+  75%{transform:translateX(9px)}
+}
+
+.feedback {
+  font-size: 24px;
+  font-weight: 700;
+  min-height: 38px;
+  margin: 6px 0;
+  text-align: center;
+}
+.feedback.correct-msg { color: #2e7d32; }
+.feedback.wrong-msg { color: #c62828; }
+.feedback.half-msg { color: #e65100; }
+
+.next-btn {
+  display: none;
+  margin: 10px auto 0;
+  padding: 14px 52px;
+  background: #e65100;
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  font-size: 24px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+.next-btn:hover { background: #bf360c; }
+
+.result-card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 40px 32px;
+  max-width: 620px;
+  width: 100%;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+  text-align: center;
+  display: none;
+}
+.result-emoji { font-size: 80px; margin-bottom: 16px; }
+.result-title { font-size: 34px; font-weight: 900; color: #e65100; margin-bottom: 10px; }
+.result-score { font-size: 28px; margin-bottom: 20px; }
+.result-score span { font-size: 52px; font-weight: 900; color: #d84315; }
+.stars { font-size: 44px; letter-spacing: 8px; margin: 10px 0; }
+.result-msg { font-size: 22px; color: #555; margin-bottom: 28px; }
+.retry-btn {
+  padding: 16px 44px;
+  background: #ff9800;
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  font-size: 24px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  margin: 6px;
+}
+.retry-btn:hover { background: #ef6c00; }
+</style>
+</head>
+<body>
+
+<h1>だれが　なにを　どうする 🌟</h1>
+<div class="subtitle">えを みて ぶんを つくろう！</div>
+
+<div class="score-bar">
+  <div>せいかい：<span id="correct-count">0</span></div>
+  <div>もんだい：<span id="total-count">0</span> / <span id="total-max">5</span></div>
+</div>
+
+<div class="card" id="quiz-card">
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+  </div>
+  <div class="q-num" id="q-num">もんだい 1 / 5</div>
+
+  <div class="scene" id="scene"></div>
+
+  <div class="q-label" id="q-label">だれ　が？</div>
+
+  <div class="sentence-template" id="sentence-template"></div>
+
+  <div class="choices" id="choices"></div>
+  <div class="feedback" id="feedback"></div>
+  <button class="next-btn" id="next-btn" onclick="nextQuestion()">つぎへ →</button>
+</div>
+
+<div class="result-card" id="result-card">
+  <div class="result-emoji" id="result-emoji">🎉</div>
+  <div class="stars" id="result-stars"></div>
+  <div class="result-title" id="result-title">おわったよ！</div>
+  <div class="result-score"><span id="result-score-num">0</span> もん せいかい！</div>
+  <div class="result-msg" id="result-msg"></div>
+  <button class="retry-btn" onclick="startQuiz()">もういちど やる</button>
+</div>
+
+<script>
+const questions = [
+  { subject:{e:'🧑‍🏫',w:'せんせい'},     object:{e:'🏀',w:'ボール'},    verb:{e:'🤾',w:'なげる'} },
+  { subject:{e:'👦',w:'こども'},          object:{e:'🍎',w:'りんご'},     verb:{e:'😋',w:'たべる'} },
+  { subject:{e:'🐶',w:'いぬ'},            object:{e:'🦴',w:'ほね'},       verb:{e:'🍖',w:'たべる'} },
+  { subject:{e:'👧',w:'おんなのこ'},     object:{e:'📚',w:'ほん'},       verb:{e:'📖',w:'よむ'} },
+  { subject:{e:'👨',w:'おとうさん'},     object:{e:'🚗',w:'くるま'},     verb:{e:'🧼',w:'あらう'} },
+  { subject:{e:'🐱',w:'ねこ'},            object:{e:'🐟',w:'さかな'},     verb:{e:'😋',w:'たべる'} },
+  { subject:{e:'👩',w:'おかあさん'},     object:{e:'🍰',w:'ケーキ'},     verb:{e:'👩‍🍳',w:'つくる'} },
+  { subject:{e:'🐰',w:'うさぎ'},          object:{e:'🥕',w:'にんじん'},   verb:{e:'😋',w:'たべる'} },
+  { subject:{e:'👧',w:'おんなのこ'},     object:{e:'🎵',w:'うた'},       verb:{e:'🎤',w:'うたう'} },
+  { subject:{e:'👦',w:'おとこのこ'},     object:{e:'⚽',w:'サッカー'},   verb:{e:'🦶',w:'する'} },
+  { subject:{e:'👴',w:'おじいちゃん'},   object:{e:'📰',w:'しんぶん'},   verb:{e:'📖',w:'よむ'} },
+  { subject:{e:'🐵',w:'さる'},            object:{e:'🍌',w:'バナナ'},     verb:{e:'😋',w:'たべる'} },
+  { subject:{e:'👶',w:'あかちゃん'},     object:{e:'🍼',w:'ミルク'},     verb:{e:'🥛',w:'のむ'} },
+  { subject:{e:'👫',w:'ともだち'},        object:{e:'🎨',w:'え'},          verb:{e:'✏️',w:'かく'} },
+  { subject:{e:'👩',w:'おねえさん'},     object:{e:'💐',w:'はな'},       verb:{e:'🌱',w:'うえる'} },
+  { subject:{e:'🐦',w:'とり'},            object:{e:'🪺',w:'たまご'},     verb:{e:'🐣',w:'うむ'} },
+  { subject:{e:'👨',w:'おとうさん'},     object:{e:'⚾',w:'やきゅう'},   verb:{e:'🥎',w:'する'} },
+  { subject:{e:'👧',w:'おんなのこ'},     object:{e:'🍵',w:'おちゃ'},     verb:{e:'🥤',w:'のむ'} },
+];
+
+let currentQ = 0;
+let correctCount = 0;
+let quizData = [];
+let currentSlot = 0;
+let slotsAnswered = [false, false, false];
+let slotsCorrect = [false, false, false];
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startQuiz() {
+  quizData = shuffle(questions).slice(0, 5);
+  currentQ = 0;
+  correctCount = 0;
+  document.getElementById('quiz-card').style.display = 'block';
+  document.getElementById('result-card').style.display = 'none';
+  document.getElementById('correct-count').textContent = 0;
+  document.getElementById('total-count').textContent = 0;
+  document.getElementById('total-max').textContent = quizData.length;
+  showQuestion();
+}
+
+function showQuestion() {
+  currentSlot = 0;
+  slotsAnswered = [false, false, false];
+  slotsCorrect = [false, false, false];
+
+  const q = quizData[currentQ];
+  const total = quizData.length;
+  document.getElementById('q-num').textContent = `もんだい ${currentQ + 1} / ${total}`;
+  document.getElementById('progress-fill').style.width = `${(currentQ / total) * 100}%`;
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('next-btn').style.display = 'none';
+
+  renderScene(q);
+  renderQLabel();
+  renderSentenceTemplate();
+  renderChoices();
+}
+
+function renderScene(q) {
+  document.getElementById('scene').innerHTML = `
+    <div class="scene-emoji">${q.subject.e}</div>
+    <div class="scene-arrow">→</div>
+    <div class="scene-emoji">${q.object.e}</div>
+    <div class="scene-arrow">→</div>
+    <div class="scene-emoji">${q.verb.e}</div>
+  `;
+}
+
+function renderQLabel() {
+  const labels = ['だれ　が？', 'なに　を？', 'どう　する？'];
+  document.getElementById('q-label').textContent = labels[currentSlot];
+}
+
+function renderSentenceTemplate() {
+  const q = quizData[currentQ];
+  const slots = ['subject', 'object', 'verb'];
+  let html = '';
+  slots.forEach((slotName, i) => {
+    let content = '？';
+    let cls = 'slot';
+    if (slotsAnswered[i]) {
+      content = q[slotName].w;
+      cls = 'slot filled';
+    } else if (i === currentSlot) {
+      cls = 'slot active';
+    }
+    html += `<div class="${cls}">${content}</div>`;
+    if (i === 0) html += '<span class="particle">が</span>';
+    if (i === 1) html += '<span class="particle">を</span>';
+  });
+  document.getElementById('sentence-template').innerHTML = html;
+}
+
+function renderChoices() {
+  const q = quizData[currentQ];
+  const slotName = ['subject', 'object', 'verb'][currentSlot];
+  const correctWord = q[slotName].w;
+  const allWords = [...new Set(questions.map(qq => qq[slotName].w))];
+  const distractors = shuffle(allWords.filter(w => w !== correctWord)).slice(0, 2);
+  const choices = shuffle([correctWord, ...distractors]);
+
+  const el = document.getElementById('choices');
+  el.innerHTML = '';
+  choices.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'choice';
+    btn.textContent = c;
+    btn.onclick = () => handleAnswer(c, btn);
+    el.appendChild(btn);
+  });
+}
+
+function handleAnswer(selected, btn) {
+  if (slotsAnswered[currentSlot]) return;
+  const q = quizData[currentQ];
+  const slotName = ['subject', 'object', 'verb'][currentSlot];
+  const correctWord = q[slotName].w;
+
+  slotsAnswered[currentSlot] = true;
+  slotsCorrect[currentSlot] = (selected === correctWord);
+
+  document.querySelectorAll('.choice').forEach(b => b.classList.add('disabled'));
+  const feedback = document.getElementById('feedback');
+
+  if (selected === correctWord) {
+    feedback.textContent = '⭕ せいかい！';
+    feedback.className = 'feedback correct-msg';
+  } else {
+    feedback.textContent = `❌ こたえは「${correctWord}」だよ`;
+    feedback.className = 'feedback wrong-msg';
+    btn.classList.add('shake');
+  }
+
+  renderSentenceTemplate();
+
+  if (currentSlot < 2) {
+    setTimeout(() => {
+      currentSlot++;
+      renderSentenceTemplate();
+      renderQLabel();
+      renderChoices();
+      feedback.textContent = '';
+      feedback.className = 'feedback';
+    }, 1100);
+  } else {
+    document.getElementById('total-count').textContent = currentQ + 1;
+    const numCorrect = slotsCorrect.filter(c => c).length;
+    setTimeout(() => {
+      if (numCorrect === 3) {
+        correctCount++;
+        document.getElementById('correct-count').textContent = correctCount;
+        feedback.textContent = '🎉 ぜんぶ せいかい！すごい！';
+        feedback.className = 'feedback correct-msg';
+      } else if (numCorrect === 2) {
+        feedback.textContent = '😊 おしい！もうちょっと！';
+        feedback.className = 'feedback half-msg';
+      } else {
+        feedback.textContent = '💪 もういちど かくにんしよう';
+        feedback.className = 'feedback';
+      }
+      document.getElementById('next-btn').style.display = 'block';
+    }, 700);
+  }
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ >= quizData.length) {
+    showResult();
+  } else {
+    showQuestion();
+  }
+}
+
+function showResult() {
+  document.getElementById('quiz-card').style.display = 'none';
+  document.getElementById('result-card').style.display = 'block';
+
+  const total = quizData.length;
+  const rate = correctCount / total;
+
+  let emoji, title, msg, stars;
+  if (rate === 1) {
+    emoji = '🎉'; title = 'かんぺき！すごい！'; stars = '⭐⭐⭐';
+    msg = 'ぜんもん せいかい！ よくできました！';
+  } else if (rate >= 0.6) {
+    emoji = '😊'; title = 'よくできました！'; stars = '⭐⭐';
+    msg = 'もういちど やってみよう！';
+  } else {
+    emoji = '💪'; title = 'がんばったね！'; stars = '⭐';
+    msg = 'もういちど れんしゅう しよう！';
+  }
+
+  document.getElementById('result-emoji').textContent = emoji;
+  document.getElementById('result-title').textContent = title;
+  document.getElementById('result-stars').textContent = stars;
+  document.getElementById('result-score-num').textContent = correctCount;
+  document.getElementById('result-msg').textContent = msg;
+}
+
+startQuiz();
+</script>
+</body>
+</html>

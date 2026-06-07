@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>ピクトグラムクイズ</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { overscroll-behavior: none; }
+  body {
+    font-family: "Hiragino Maru Gothic ProN", "Yu Gothic", "Comic Sans MS", sans-serif;
+    background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 100%);
+    min-height: 100vh;
+    padding: 14px;
+    user-select: none;
+    color: #333;
+  }
+  header {
+    text-align: center;
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-size: 1.8rem;
+    color: #0277bd;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 0 #fff;
+  }
+
+  /* レベル選択 */
+  .level-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+  .level-btn {
+    padding: 10px 18px;
+    font-size: 1rem;
+    border: 3px solid #0277bd;
+    background: white;
+    color: #0277bd;
+    border-radius: 30px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: bold;
+    transition: all 0.2s;
+    line-height: 1.2;
+  }
+  .level-btn small { font-weight: normal; font-size: 0.8rem; }
+  .level-btn:active { transform: scale(0.95); }
+  .level-btn.active {
+    background: #0277bd;
+    color: white;
+  }
+
+  /* 進捗 */
+  .progress {
+    text-align: center;
+    margin-bottom: 12px;
+    font-size: 1.1rem;
+    color: #555;
+    font-weight: bold;
+  }
+  .progress-dots {
+    display: inline-flex;
+    gap: 6px;
+    margin-left: 8px;
+  }
+  .dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #ddd;
+  }
+  .dot.done { background: #4caf50; }
+  .dot.current { background: #ff9800; transform: scale(1.3); }
+
+  /* ピクトグラム表示エリア */
+  .question-area {
+    background: white;
+    border-radius: 24px;
+    padding: 22px 18px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+  .question-text {
+    font-size: 1.4rem;
+    margin-bottom: 16px;
+    color: #555;
+    font-weight: bold;
+  }
+
+  /* 標識タイル(実標識の見た目に近づける) */
+  .sign-tile {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 240px;
+    height: 240px;
+    background: white;
+    border: 4px solid #333;
+    border-radius: 14px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+    padding: 12px;
+    animation: appear 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  }
+  .sign-tile img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+  }
+  @keyframes appear {
+    0% { transform: scale(0); opacity: 0; }
+    70% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); }
+  }
+
+  .speak-btn {
+    margin-top: 14px;
+    padding: 10px 18px;
+    border: none;
+    background: #ff9800;
+    color: white;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+  }
+  .speak-btn:active { transform: scale(0.95); }
+
+  /* 答えボタン */
+  .answers {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .answer-btn {
+    background: white;
+    border: 4px solid #ccc;
+    border-radius: 20px;
+    padding: 14px;
+    font-size: 1.4rem;
+    font-family: inherit;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    transition: transform 0.15s, border-color 0.15s, background 0.15s;
+    min-height: 88px;
+    text-align: left;
+  }
+  .answer-btn:active { transform: scale(0.97); }
+  .answer-btn .ans-thumb {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+    background: white;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .answer-btn .ans-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .answer-btn .ans-text {
+    flex: 1;
+  }
+  .answer-btn.correct {
+    border-color: #4caf50;
+    background: #e8f5e9;
+    animation: correct-pulse 0.6s;
+  }
+  .answer-btn.wrong {
+    border-color: #f44336;
+    background: #ffebee;
+    animation: shake 0.4s;
+  }
+  @keyframes correct-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+  }
+
+  /* 結果オーバーレイ */
+  .praise-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.4);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 20px;
+  }
+  .praise-overlay.show { display: flex; }
+  .praise-card {
+    background: white;
+    border-radius: 28px;
+    padding: 32px 24px;
+    text-align: center;
+    max-width: 360px;
+    width: 100%;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+    animation: bounce-in 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  }
+  @keyframes bounce-in {
+    0% { transform: scale(0); }
+    70% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+  .praise-card h2 {
+    font-size: 2rem;
+    color: #ff6f00;
+    margin-bottom: 12px;
+  }
+  .praise-card .score {
+    font-size: 4rem;
+    font-weight: bold;
+    color: #2e7d32;
+    margin: 12px 0;
+  }
+  .praise-card .stars {
+    font-size: 2.5rem;
+    margin-bottom: 18px;
+    letter-spacing: 8px;
+  }
+  .praise-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .praise-btn {
+    padding: 14px 20px;
+    border: none;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    font-family: inherit;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  }
+  .praise-btn:active { transform: scale(0.97); }
+  .praise-btn.retry { background: #ff9800; }
+  .praise-btn.next { background: #4caf50; }
+  .praise-btn.home { background: #607d8b; }
+
+  /* 正解ふきだし */
+  .feedback {
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%) scale(0);
+    color: white;
+    padding: 24px 40px;
+    border-radius: 30px;
+    font-size: 2rem;
+    font-weight: bold;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    z-index: 200;
+    pointer-events: none;
+  }
+  .feedback.show {
+    animation: feedback-pop 1.2s ease-out forwards;
+  }
+  @keyframes feedback-pop {
+    0% { transform: translateX(-50%) scale(0); }
+    30% { transform: translateX(-50%) scale(1.15); }
+    50% { transform: translateX(-50%) scale(1); }
+    100% { transform: translateX(-50%) scale(1); opacity: 0; }
+  }
+
+  footer {
+    text-align: center;
+    margin-top: 16px;
+    color: #666;
+    font-size: 0.8rem;
+    line-height: 1.5;
+  }
+  footer a { color: #0277bd; }
+
+  @media (min-width: 600px) {
+    .answers { flex-direction: row; flex-wrap: wrap; }
+    .answer-btn { flex: 1 1 calc(50% - 6px); }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>🪧 ピクトグラムクイズ 🪧</h1>
+  <div class="level-buttons" id="level-buttons">
+    <button class="level-btn active" data-level="1">レベル1<br><small>まいにち みる</small></button>
+    <button class="level-btn" data-level="2">レベル2<br><small>おでかけ</small></button>
+    <button class="level-btn" data-level="3">レベル3<br><small>あんぜん</small></button>
+  </div>
+</header>
+
+<div class="progress">
+  <span id="progress-text">1 / 8 もんめ</span>
+  <span class="progress-dots" id="progress-dots"></span>
+</div>
+
+<div class="question-area">
+  <div class="question-text">このマーク なに？</div>
+  <div class="sign-tile" id="sign-display">
+    <img id="sign-img" alt="ピクトグラム">
+  </div>
+  <div>
+    <button class="speak-btn" id="speak-btn">🔊 もういちど きく</button>
+  </div>
+</div>
+
+<div class="answers" id="answers"></div>
+
+<footer>
+  まちで みかける マークを おぼえよう<br>
+  <small>図記号: JIS Z 8210 案内用図記号 / 交通エコロジー・モビリティ財団 公開データ</small>
+</footer>
+
+<div class="feedback" id="feedback"></div>
+
+<div class="praise-overlay" id="praise-overlay">
+  <div class="praise-card">
+    <h2 id="result-title">🎉 おわり！</h2>
+    <div class="score" id="result-score">8 / 8</div>
+    <div class="stars" id="result-stars">⭐⭐⭐</div>
+    <div class="praise-actions">
+      <button class="praise-btn next" id="result-next">▶ つぎのレベル</button>
+      <button class="praise-btn retry" id="result-retry">🔄 もういちど</button>
+      <button class="praise-btn home" id="result-home">🏠 レベル1にもどる</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== JIS Z 8210 標準ピクトグラム データ =====
+// file は pictograms/ フォルダの実SVGファイル名
+const PICTOGRAMS = {
+  1: [ // レベル1: まいにち みる (学校・施設で毎日見るマーク)
+    { file: '5106_Toilets.svg',               label: 'トイレ' },
+    { file: '5107_Men.svg',                   label: 'おとこの トイレ' },
+    { file: '5108_Women.svg',                 label: 'おんなの トイレ' },
+    { file: 'JA301_Emergency_exit.svg',       label: 'ひじょうぐち' },
+    { file: '5127_Elevator.svg',              label: 'エレベーター' },
+    { file: '5131_Stairs.svg',                label: 'かいだん' },
+    { file: '5111_Drinking_water.svg',        label: 'のみみず' },
+    { file: '5103_Hospital.svg',              label: 'びょういん' },
+  ],
+  2: [ // レベル2: おでかけ (まちで見るマーク)
+    { file: '5202_Railway___Railway_station.svg', label: 'えき' },
+    { file: '5205_Bus___Bus_stop.svg',            label: 'バスてい' },
+    { file: '5211_Parking.svg',                   label: 'ちゅうしゃじょう' },
+    { file: '5121_Bank__money_exchange.svg',      label: 'ぎんこう' },
+    { file: '5301_Restaurant.svg',                label: 'レストラン' },
+    { file: '5302_Coffee_shop.svg',               label: 'カフェ' },
+    { file: '5306_Convenience_store.svg',         label: 'コンビニ' },
+    { file: '5101_Information.svg',               label: 'あんないじょ' },
+  ],
+  3: [ // レベル3: あんぜん (注意・禁止のマーク)
+    { file: '6202_No_smoking.svg',                label: 'タバコ ダメ' },
+    { file: '6204_No_entry.svg',                  label: 'はいったら ダメ' },
+    { file: '6211_Not_drinking_water.svg',        label: 'のんだら ダメ' },
+    { file: '6301_General_caution.svg',           label: 'きを つけて' },
+    { file: '6305_Caution__slippery_surface.svg', label: 'すべる ちゅうい' },
+    { file: '6308_Caution__electricity.svg',      label: 'でんき あぶない' },
+    { file: '5109_Accessible_facility.svg',       label: 'くるまいす' },
+    { file: 'JD101_Help_mark.svg',                label: 'ヘルプマーク' },
+  ],
+};
+
+const PICTOGRAM_DIR = 'pictograms/';
+
+// ===== ステート =====
+let currentLevel = 1;
+let questions = [];
+let qIndex = 0;
+let correctCount = 0;
+let locked = false;
+
+// ===== 要素 =====
+const levelBtns     = document.querySelectorAll('.level-btn');
+const progressText  = document.getElementById('progress-text');
+const progressDots  = document.getElementById('progress-dots');
+const signDisplay   = document.getElementById('sign-display');
+const signImg       = document.getElementById('sign-img');
+const speakBtn      = document.getElementById('speak-btn');
+const answersEl     = document.getElementById('answers');
+const feedbackEl    = document.getElementById('feedback');
+const praiseOverlay = document.getElementById('praise-overlay');
+const resultTitle   = document.getElementById('result-title');
+const resultScore   = document.getElementById('result-score');
+const resultStars   = document.getElementById('result-stars');
+const resultNext    = document.getElementById('result-next');
+const resultRetry   = document.getElementById('result-retry');
+const resultHome    = document.getElementById('result-home');
+
+// ===== ユーティリティ =====
+function shuffle(arr) {
+  return [...arr].sort(() => Math.random() - 0.5);
+}
+
+function speak(text, rate = 0.9) {
+  if (!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = 'ja-JP';
+  utt.rate = rate;
+  utt.pitch = 1.05;
+  speechSynthesis.speak(utt);
+}
+
+function pictogramURL(file) {
+  // ファイル名に含まれる#などをエスケープ
+  return PICTOGRAM_DIR + encodeURIComponent(file).replace(/%2F/g, '/');
+}
+
+// ===== ゲーム進行 =====
+function startLevel(level) {
+  currentLevel = level;
+  questions = shuffle(PICTOGRAMS[level]);
+  qIndex = 0;
+  correctCount = 0;
+  praiseOverlay.classList.remove('show');
+  levelBtns.forEach(b => b.classList.toggle('active', +b.dataset.level === level));
+  renderQuestion();
+}
+
+function renderQuestion() {
+  if (qIndex >= questions.length) {
+    showResult();
+    return;
+  }
+  locked = false;
+  const q = questions[qIndex];
+
+  // 進捗
+  progressText.textContent = `${qIndex + 1} / ${questions.length} もんめ`;
+  progressDots.innerHTML = '';
+  for (let i = 0; i < questions.length; i++) {
+    const d = document.createElement('span');
+    d.className = 'dot' + (i < qIndex ? ' done' : i === qIndex ? ' current' : '');
+    progressDots.appendChild(d);
+  }
+
+  // ピクトグラム表示
+  signImg.src = pictogramURL(q.file);
+  signImg.alt = q.label;
+  // 再アニメーション
+  signDisplay.style.animation = 'none';
+  void signDisplay.offsetWidth;
+  signDisplay.style.animation = '';
+
+  // 選択肢 (正解1 + 同レベルから誤答2)
+  const otherPool = PICTOGRAMS[currentLevel].filter(p => p.label !== q.label);
+  const distractors = shuffle(otherPool).slice(0, 2);
+  const choices = shuffle([q, ...distractors]);
+
+  answersEl.innerHTML = '';
+  choices.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'answer-btn';
+    btn.innerHTML = `
+      <span class="ans-thumb"><img src="${pictogramURL(c.file)}" alt=""></span>
+      <span class="ans-text">${c.label}</span>
+    `;
+    btn.onclick = () => handleAnswer(btn, c, q);
+    answersEl.appendChild(btn);
+  });
+
+  // 自動読み上げ
+  setTimeout(() => speak('このマーク なに？'), 300);
+}
+
+function handleAnswer(btn, choice, question) {
+  if (locked) return;
+  locked = true;
+
+  if (choice.label === question.label) {
+    btn.classList.add('correct');
+    correctCount++;
+    showFeedback(true);
+    speak('せいかい！' + question.label);
+    setTimeout(() => {
+      qIndex++;
+      renderQuestion();
+    }, 1500);
+  } else {
+    btn.classList.add('wrong');
+    showFeedback(false);
+    speak('もういちど みてみよう');
+    setTimeout(() => {
+      btn.classList.remove('wrong');
+      locked = false;
+    }, 900);
+  }
+}
+
+function showFeedback(isCorrect) {
+  feedbackEl.textContent = isCorrect
+    ? ['せいかい！🎉','よくできました！⭐','ピンポーン！✨','はなまる！💮'][Math.floor(Math.random()*4)]
+    : 'もういちど 🤔';
+  feedbackEl.style.background = isCorrect
+    ? 'linear-gradient(135deg, #f1c40f, #e67e22)'
+    : 'linear-gradient(135deg, #90caf9, #42a5f5)';
+  feedbackEl.classList.remove('show');
+  void feedbackEl.offsetWidth;
+  feedbackEl.classList.add('show');
+}
+
+function showResult() {
+  const total = questions.length;
+  resultScore.textContent = `${correctCount} / ${total}`;
+
+  const ratio = correctCount / total;
+  let stars = '⭐';
+  if (ratio >= 0.5) stars = '⭐⭐';
+  if (ratio >= 0.8) stars = '⭐⭐⭐';
+  if (ratio === 1)  stars = '⭐⭐⭐⭐⭐';
+  resultStars.textContent = stars;
+
+  if (ratio === 1) {
+    resultTitle.textContent = '🎉 ぜんぶ せいかい！';
+  } else if (ratio >= 0.5) {
+    resultTitle.textContent = '✨ よくできました！';
+  } else {
+    resultTitle.textContent = '👍 がんばりました！';
+  }
+
+  resultNext.style.display = currentLevel < 3 ? 'block' : 'none';
+
+  praiseOverlay.classList.add('show');
+  speak('おわりました！' + correctCount + 'もん せいかい！', 0.85);
+}
+
+// ===== イベント =====
+levelBtns.forEach(btn => {
+  btn.onclick = () => startLevel(+btn.dataset.level);
+});
+speakBtn.onclick = () => speak('このマーク なに？');
+resultNext.onclick = () => {
+  if (currentLevel < 3) startLevel(currentLevel + 1);
+};
+resultRetry.onclick = () => startLevel(currentLevel);
+resultHome.onclick = () => startLevel(1);
+
+// ===== 開始 =====
+startLevel(1);
+</script>
+</body>
+</html>

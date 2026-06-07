@@ -34,19 +34,19 @@
     gap: 8px;
   }
   .level-btn {
-    padding: 10px 18px;
-    font-size: 1rem;
+    padding: 8px 12px;
+    font-size: 0.95rem;
     border: 3px solid #0277bd;
     background: white;
     color: #0277bd;
-    border-radius: 30px;
+    border-radius: 24px;
     cursor: pointer;
     font-family: inherit;
     font-weight: bold;
     transition: all 0.2s;
     line-height: 1.2;
   }
-  .level-btn small { font-weight: normal; font-size: 0.8rem; }
+  .level-btn small { font-weight: normal; font-size: 0.72rem; display: block; }
   .level-btn:active { transform: scale(0.95); }
   .level-btn.active {
     background: #0277bd;
@@ -291,6 +291,7 @@
     <button class="level-btn active" data-level="1">レベル1<br><small>まいにち みる</small></button>
     <button class="level-btn" data-level="2">レベル2<br><small>おでかけ</small></button>
     <button class="level-btn" data-level="3">レベル3<br><small>あんぜん</small></button>
+    <button class="level-btn" data-level="4">レベル4<br><small>イオンに いこう</small></button>
   </div>
 </header>
 
@@ -381,6 +382,20 @@ const PICTOGRAMS = {
     { file: '6104_Safety_evacuation_area.svg',                label: 'ひなんばしょ' },
     { file: '5109_Accessible_facility.svg',                   label: 'くるまいす' },
     { file: 'JD101_Help_mark.svg',                            label: 'ヘルプマーク' },
+  ],
+  4: [ // レベル4: イオンに いこう (ショッピングモールで見るマーク) 12問
+    { file: '5113_Check-in___Reception.svg',  label: 'サービスカウンター' },
+    { file: '5305_Cashier.svg',               label: 'レジ' },
+    { file: '5122_Cash_service.svg',          label: 'ATM' },
+    { file: '5126_Cart.svg',                  label: 'カート' },
+    { file: '5118_Coin_lockers.svg',          label: 'コインロッカー' },
+    { file: '5134_Dressing_room.svg',         label: 'しちゃくしつ' },
+    { file: '5132_Baby_care_room.svg',        label: 'ベビールーム' },
+    { file: '5153_Prams__strollers.svg',      label: 'ベビーカー OK' },
+    { file: '5119_Lounge___Waiting_room.svg', label: 'きゅうけいじょ' },
+    { file: '5114_Lost_and_found.svg',        label: 'おとしもの' },
+    { file: '5112_Smoking_area.svg',          label: 'きつえんじょ' },
+    { file: '5129_Escalator__up.svg',         label: 'のぼり エスカレーター' },
   ],
 };
 
@@ -542,7 +557,7 @@ function showResult() {
     resultTitle.textContent = '👍 がんばりました！';
   }
 
-  resultNext.style.display = currentLevel < 3 ? 'block' : 'none';
+  resultNext.style.display = currentLevel < 4 ? 'block' : 'none';
 
   praiseOverlay.classList.add('show');
   speak('おわりました！' + correctCount + 'もん せいかい！', 0.85);
@@ -554,7 +569,7 @@ levelBtns.forEach(btn => {
 });
 speakBtn.onclick = () => speak('このマーク なに？');
 resultNext.onclick = () => {
-  if (currentLevel < 3) startLevel(currentLevel + 1);
+  if (currentLevel < 4) startLevel(currentLevel + 1);
 };
 resultRetry.onclick = () => startLevel(currentLevel);
 resultHome.onclick = () => startLevel(1);

@@ -292,24 +292,30 @@ h1 {
 
 <script>
 const questions = [
-  { subject:{e:'🧑‍🏫',w:'せんせい'},     object:{e:'🏀',w:'ボール'},    verb:{e:'🤾',w:'なげる'} },
-  { subject:{e:'👦',w:'こども'},          object:{e:'🍎',w:'りんご'},     verb:{e:'😋',w:'たべる'} },
-  { subject:{e:'🐶',w:'いぬ'},            object:{e:'🦴',w:'ほね'},       verb:{e:'🍖',w:'たべる'} },
-  { subject:{e:'👧',w:'おんなのこ'},     object:{e:'📚',w:'ほん'},       verb:{e:'📖',w:'よむ'} },
-  { subject:{e:'👨',w:'おとうさん'},     object:{e:'🚗',w:'くるま'},     verb:{e:'🧼',w:'あらう'} },
-  { subject:{e:'🐱',w:'ねこ'},            object:{e:'🐟',w:'さかな'},     verb:{e:'😋',w:'たべる'} },
-  { subject:{e:'👩',w:'おかあさん'},     object:{e:'🍰',w:'ケーキ'},     verb:{e:'👩‍🍳',w:'つくる'} },
-  { subject:{e:'🐰',w:'うさぎ'},          object:{e:'🥕',w:'にんじん'},   verb:{e:'😋',w:'たべる'} },
-  { subject:{e:'👧',w:'おんなのこ'},     object:{e:'🎵',w:'うた'},       verb:{e:'🎤',w:'うたう'} },
-  { subject:{e:'👦',w:'おとこのこ'},     object:{e:'⚽',w:'サッカー'},   verb:{e:'🦶',w:'する'} },
-  { subject:{e:'👴',w:'おじいちゃん'},   object:{e:'📰',w:'しんぶん'},   verb:{e:'📖',w:'よむ'} },
-  { subject:{e:'🐵',w:'さる'},            object:{e:'🍌',w:'バナナ'},     verb:{e:'😋',w:'たべる'} },
-  { subject:{e:'👶',w:'あかちゃん'},     object:{e:'🍼',w:'ミルク'},     verb:{e:'🥛',w:'のむ'} },
-  { subject:{e:'👫',w:'ともだち'},        object:{e:'🎨',w:'え'},          verb:{e:'✏️',w:'かく'} },
-  { subject:{e:'👩',w:'おねえさん'},     object:{e:'💐',w:'はな'},       verb:{e:'🌱',w:'うえる'} },
-  { subject:{e:'🐦',w:'とり'},            object:{e:'🪺',w:'たまご'},     verb:{e:'🐣',w:'うむ'} },
-  { subject:{e:'👨',w:'おとうさん'},     object:{e:'⚾',w:'やきゅう'},   verb:{e:'🥎',w:'する'} },
-  { subject:{e:'👧',w:'おんなのこ'},     object:{e:'🍵',w:'おちゃ'},     verb:{e:'🥤',w:'のむ'} },
+  // おとこのこ
+  { subject:{e:'👦',w:'おとこのこ'},  object:{e:'🏀',w:'ボール'},    verb:{e:'🤾',w:'なげる'} },
+  { subject:{e:'👦',w:'おとこのこ'},  object:{e:'⚽',w:'サッカー'},  verb:{e:'🦶',w:'する'} },
+  { subject:{e:'👦',w:'おとこのこ'},  object:{e:'🍎',w:'りんご'},    verb:{e:'😋',w:'たべる'} },
+  { subject:{e:'👦',w:'おとこのこ'},  object:{e:'🧃',w:'ジュース'},  verb:{e:'🥤',w:'のむ'} },
+  { subject:{e:'👦',w:'おとこのこ'},  object:{e:'🎨',w:'え'},         verb:{e:'✏️',w:'かく'} },
+  // おんなのこ
+  { subject:{e:'👧',w:'おんなのこ'},  object:{e:'📚',w:'ほん'},       verb:{e:'📖',w:'よむ'} },
+  { subject:{e:'👧',w:'おんなのこ'},  object:{e:'🎵',w:'うた'},       verb:{e:'🎤',w:'うたう'} },
+  { subject:{e:'👧',w:'おんなのこ'},  object:{e:'🍵',w:'おちゃ'},     verb:{e:'🥤',w:'のむ'} },
+  { subject:{e:'👧',w:'おんなのこ'},  object:{e:'🍰',w:'ケーキ'},     verb:{e:'😋',w:'たべる'} },
+  { subject:{e:'👧',w:'おんなのこ'},  object:{e:'💐',w:'はな'},       verb:{e:'🌱',w:'うえる'} },
+  // おとうさん
+  { subject:{e:'👨',w:'おとうさん'},  object:{e:'🚗',w:'くるま'},     verb:{e:'🧼',w:'あらう'} },
+  { subject:{e:'👨',w:'おとうさん'},  object:{e:'📰',w:'しんぶん'},   verb:{e:'📖',w:'よむ'} },
+  { subject:{e:'👨',w:'おとうさん'},  object:{e:'⚾',w:'やきゅう'},   verb:{e:'🥎',w:'する'} },
+  { subject:{e:'👨',w:'おとうさん'},  object:{e:'☕',w:'コーヒー'},   verb:{e:'🥤',w:'のむ'} },
+  { subject:{e:'👨',w:'おとうさん'},  object:{e:'🍙',w:'おにぎり'},   verb:{e:'😋',w:'たべる'} },
+  // おかあさん
+  { subject:{e:'👩',w:'おかあさん'},  object:{e:'🍰',w:'ケーキ'},     verb:{e:'👩‍🍳',w:'つくる'} },
+  { subject:{e:'👩',w:'おかあさん'},  object:{e:'🍚',w:'ごはん'},     verb:{e:'👩‍🍳',w:'つくる'} },
+  { subject:{e:'👩',w:'おかあさん'},  object:{e:'🧹',w:'そうじ'},     verb:{e:'🧽',w:'する'} },
+  { subject:{e:'👩',w:'おかあさん'},  object:{e:'🍵',w:'おちゃ'},     verb:{e:'🥤',w:'のむ'} },
+  { subject:{e:'👩',w:'おかあさん'},  object:{e:'🌷',w:'チューリップ'}, verb:{e:'🌱',w:'うえる'} },
 ];
 
 let currentLevel = 1; // 1=2語文, 2=3語文

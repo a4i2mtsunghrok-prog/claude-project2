@@ -160,6 +160,7 @@ h1 {
 }
 .choice:active { transform: scale(0.93); }
 .choice-ha { background: #fff9c4; border-color: #f9a825; color: #e65100; }
+.choice-ga { background: #fff9c4; border-color: #f9a825; color: #e65100; }
 .choice-wo { background: #e3f2fd; border-color: #42a5f5; color: #1565c0; }
 .choice-ni { background: #e8f5e9; border-color: #66bb6a; color: #2e7d32; }
 .choice-mo { background: #fce4ec; border-color: #f48fb1; color: #c2185b; }
@@ -244,13 +245,11 @@ h1 {
 <body>
 
 <h1>じょしを れんしゅうしよう ✏️</h1>
-<div class="subtitle">は・を・に・も・で　を えらぼう</div>
+<div class="subtitle">が・を・に　を えらぼう</div>
 
 <div class="level-bar">
-  <button class="level-btn active" onclick="setLevel(1)">⭐ Lv1（は）</button>
-  <button class="level-btn" onclick="setLevel(2)">⭐⭐ Lv2（は・を）</button>
-  <button class="level-btn" onclick="setLevel(3)">⭐⭐⭐ Lv3（は・を・に）</button>
-  <button class="level-btn lv4" onclick="setLevel(4)">👑 Lv4（は・を・に・も・で）</button>
+  <button class="level-btn active" onclick="setLevel(1)">⭐ Lv1（が・を）</button>
+  <button class="level-btn" onclick="setLevel(2)">⭐⭐ Lv2（が・を・に）</button>
 </div>
 
 <div class="score-bar">
@@ -282,53 +281,68 @@ h1 {
 
 <script>
 const questions = {
-  // レベル1：「は」のみ・みじかい文
+  // レベル1：「が・を」・えらぶのは２つ・20問
   1: [
-    { emoji:'🐱', before:'ねこ',         joshi:'は', after:'かわいい' },
-    { emoji:'🐶', before:'いぬ',         joshi:'は', after:'おおきい' },
-    { emoji:'🍎', before:'りんご',       joshi:'は', after:'あかい' },
-    { emoji:'🌸', before:'はな',         joshi:'は', after:'きれい' },
-    { emoji:'🍰', before:'ケーキ',       joshi:'は', after:'あまい' },
+    // 「が」（しゅご）
+    { emoji:'🐱', before:'ねこ',                   joshi:'が', after:'かわいい' },
+    { emoji:'🐶', before:'いぬ',                   joshi:'が', after:'はしる' },
+    { emoji:'🍎', before:'りんご',                 joshi:'が', after:'あかい' },
+    { emoji:'🌸', before:'はな',                   joshi:'が', after:'きれい' },
+    { emoji:'👦', before:'おとこのこ',             joshi:'が', after:'わらう' },
+    { emoji:'👧', before:'おんなのこ',             joshi:'が', after:'あるく' },
+    { emoji:'👨', before:'おとうさん',             joshi:'が', after:'ねる' },
+    { emoji:'👩', before:'おかあさん',             joshi:'が', after:'わらう' },
+    { emoji:'🐦', before:'とり',                   joshi:'が', after:'とぶ' },
+    { emoji:'🚃', before:'でんしゃ',               joshi:'が', after:'はやい' },
+    // 「を」（もくてきご）
+    { emoji:'🏀', before:'おとこのこ が ボール',   joshi:'を', after:'なげる' },
+    { emoji:'📚', before:'おんなのこ が ほん',     joshi:'を', after:'よむ' },
+    { emoji:'🍚', before:'おかあさん が ごはん',   joshi:'を', after:'つくる' },
+    { emoji:'💧', before:'おとうさん が みず',     joshi:'を', after:'のむ' },
+    { emoji:'🥕', before:'うさぎ が にんじん',     joshi:'を', after:'たべる' },
+    { emoji:'🎨', before:'おとこのこ が え',       joshi:'を', after:'かく' },
+    { emoji:'🎵', before:'おんなのこ が うた',     joshi:'を', after:'うたう' },
+    { emoji:'🐟', before:'ねこ が さかな',         joshi:'を', after:'たべる' },
+    { emoji:'📺', before:'おかあさん が テレビ',   joshi:'を', after:'みる' },
+    { emoji:'🚗', before:'おとうさん が くるま',   joshi:'を', after:'あらう' },
   ],
-  // レベル2：「は・を」・みじかい文
+  // レベル2：「が・を・に」・えらぶのは３つ・20問
   2: [
-    { emoji:'🏀', before:'おとこのこ は ボール',   joshi:'を', after:'なげる' },
-    { emoji:'📚', before:'おんなのこ は ほん',     joshi:'を', after:'よむ' },
-    { emoji:'🍚', before:'おかあさん は ごはん',   joshi:'を', after:'つくる' },
-    { emoji:'🥕', before:'うさぎ は にんじん',     joshi:'を', after:'たべる' },
-    { emoji:'🐱', before:'ねこ',                   joshi:'は', after:'かわいい' },
-  ],
-  // レベル3：「は・を・に」・みじかい文
-  3: [
-    { emoji:'🌳', before:'おとこのこ は こうえん', joshi:'に', after:'いく' },
-    { emoji:'🏫', before:'おんなのこ は がっこう', joshi:'に', after:'いく' },
-    { emoji:'🏪', before:'おかあさん は おみせ',   joshi:'に', after:'いく' },
-    { emoji:'📦', before:'ねこ は はこ',           joshi:'に', after:'はいる' },
-    { emoji:'⚽', before:'おとこのこ は ボール',    joshi:'を', after:'ける' },
-  ],
-  // レベル4：「は・を・に・も・で」・みじかい文
-  4: [
-    { emoji:'🚌', before:'おとこのこ は バス',     joshi:'で', after:'いく' },
-    { emoji:'✏️', before:'おとうさん は えんぴつ', joshi:'で', after:'かく' },
-    { emoji:'✂️', before:'おかあさん は はさみ',   joshi:'で', after:'きる' },
-    { emoji:'🥄', before:'おんなのこ は スプーン', joshi:'で', after:'たべる' },
-    { emoji:'🐱', before:'ねこ',                   joshi:'も', after:'かわいい' },
+    // 「が」（しゅご）
+    { emoji:'🐱', before:'ねこ',                   joshi:'が', after:'かわいい' },
+    { emoji:'👦', before:'おとこのこ',             joshi:'が', after:'わらう' },
+    { emoji:'🌸', before:'はな',                   joshi:'が', after:'きれい' },
+    { emoji:'🐦', before:'とり',                   joshi:'が', after:'とぶ' },
+    { emoji:'👧', before:'おんなのこ',             joshi:'が', after:'あるく' },
+    // 「を」（もくてきご）
+    { emoji:'🏀', before:'おとこのこ が ボール',   joshi:'を', after:'なげる' },
+    { emoji:'📚', before:'おんなのこ が ほん',     joshi:'を', after:'よむ' },
+    { emoji:'🍚', before:'おかあさん が ごはん',   joshi:'を', after:'つくる' },
+    { emoji:'🥕', before:'うさぎ が にんじん',     joshi:'を', after:'たべる' },
+    { emoji:'💧', before:'おとうさん が みず',     joshi:'を', after:'のむ' },
+    { emoji:'🎵', before:'おんなのこ が うた',     joshi:'を', after:'うたう' },
+    { emoji:'🐟', before:'ねこ が さかな',         joshi:'を', after:'たべる' },
+    // 「に」（ばしょ・ほうこう）
+    { emoji:'🌳', before:'おとこのこ が こうえん', joshi:'に', after:'いく' },
+    { emoji:'🏫', before:'おんなのこ が がっこう', joshi:'に', after:'いく' },
+    { emoji:'🏪', before:'おかあさん が おみせ',   joshi:'に', after:'いく' },
+    { emoji:'📦', before:'ねこ が はこ',           joshi:'に', after:'はいる' },
+    { emoji:'🏠', before:'いぬ が おうち',         joshi:'に', after:'かえる' },
+    { emoji:'🪑', before:'おとこのこ が いす',     joshi:'に', after:'すわる' },
+    { emoji:'🌲', before:'とり が き',             joshi:'に', after:'とまる' },
+    { emoji:'🛁', before:'おとうさん が おふろ',   joshi:'に', after:'はいる' },
   ],
 };
 
 const choicesByLevel = {
-  1: ['は'],
-  2: ['は', 'を'],
-  3: ['は', 'を', 'に'],
-  4: ['は', 'を', 'に', 'も', 'で'],
+  1: ['が', 'を'],
+  2: ['が', 'を', 'に'],
 };
 
 const choiceClass = {
-  'は': 'choice-ha',
+  'が': 'choice-ga',
   'を': 'choice-wo',
   'に': 'choice-ni',
-  'も': 'choice-mo',
-  'で': 'choice-de',
 };
 
 let currentLevel = 1;

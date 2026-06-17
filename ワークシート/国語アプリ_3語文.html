@@ -368,9 +368,15 @@ function renderSentence(q) {
 }
 
 function renderChoices() {
+  // 正解 + ランダムに2つの不正解 = 3択
+  const q = quizData[currentQ];
+  const correctP = q.particles[currentBlank];
+  const distractors = shuffle(allChoices.filter(c => c !== correctP)).slice(0, 2);
+  const choices = shuffle([correctP, ...distractors]);
+
   const el = document.getElementById('choices');
   el.innerHTML = '';
-  shuffle(allChoices).forEach(c => {
+  choices.forEach(c => {
     const btn = document.createElement('button');
     btn.className = `choice ${choiceClass[c]}`;
     btn.textContent = c;
@@ -432,7 +438,7 @@ function handleAnswer(selected, btn) {
       feedback.textContent = '';
       feedback.className = 'feedback';
       setStepLabel(1);
-      enableChoices();
+      renderChoices(); // 2つ目用の選択肢を再表示
     }, 1100);
   } else {
     // 両方終わり → 採点

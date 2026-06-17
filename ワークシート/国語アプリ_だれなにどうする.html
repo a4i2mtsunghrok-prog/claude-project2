@@ -30,6 +30,38 @@ h1 {
   margin-bottom: 20px;
 }
 
+.level-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.level-btn {
+  padding: 10px 22px;
+  border: 3px solid #ff9800;
+  border-radius: 30px;
+  font-size: 18px;
+  font-weight: 700;
+  background: #fff;
+  color: #ff9800;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+.level-btn.active {
+  background: #ff9800;
+  color: #fff;
+}
+.level-btn.lv2 {
+  border-color: #d84315;
+  color: #d84315;
+}
+.level-btn.lv2.active {
+  background: #d84315;
+  color: #fff;
+}
+
 .score-bar {
   display: flex;
   gap: 24px;
@@ -219,8 +251,13 @@ h1 {
 </head>
 <body>
 
-<h1>だれが　なにを　どうする 🌟</h1>
-<div class="subtitle">えを みて ぶんを つくろう！</div>
+<h1>ぶんを つくろう 🌟</h1>
+<div class="subtitle">えを みて ことばを えらぼう！</div>
+
+<div class="level-bar">
+  <button class="level-btn active" onclick="setLevel(1)">⭐ レベル1（2ごぶん）</button>
+  <button class="level-btn lv2" onclick="setLevel(2)">⭐⭐ レベル2（3ごぶん）</button>
+</div>
 
 <div class="score-bar">
   <div>せいかい：<span id="correct-count">0</span></div>
@@ -275,12 +312,34 @@ const questions = [
   { subject:{e:'👧',w:'おんなのこ'},     object:{e:'🍵',w:'おちゃ'},     verb:{e:'🥤',w:'のむ'} },
 ];
 
+let currentLevel = 1; // 1=2語文, 2=3語文
 let currentQ = 0;
 let correctCount = 0;
 let quizData = [];
 let currentSlot = 0;
-let slotsAnswered = [false, false, false];
-let slotsCorrect = [false, false, false];
+let slotsAnswered = [];
+let slotsCorrect = [];
+
+// レベルごとの設定
+function getSlotNames() {
+  return currentLevel === 1 ? ['object', 'verb'] : ['subject', 'object', 'verb'];
+}
+function getQLabels() {
+  return currentLevel === 1
+    ? ['なに　を？', 'どう　する？']
+    : ['だれ　が？', 'なに　を？', 'どう　する？'];
+}
+function getSlotCount() {
+  return currentLevel === 1 ? 2 : 3;
+}
+
+function setLevel(lv) {
+  currentLevel = lv;
+  document.querySelectorAll('.level-btn').forEach((b, i) => {
+    b.classList.toggle('active', i === lv - 1);
+  });
+  startQuiz();
+}
 
 function shuffle(arr) {
   const a = [...arr];
@@ -305,8 +364,9 @@ function startQuiz() {
 
 function showQuestion() {
   currentSlot = 0;
-  slotsAnswered = [false, false, false];
-  slotsCorrect = [false, false, false];
+  const n = getSlotCount();
+  slotsAnswered = Array(n).fill(false);
+  slotsCorrect = Array(n).fill(false);
 
   const q = quizData[currentQ];
   const total = quizData.length;
@@ -323,25 +383,26 @@ function showQuestion() {
 }
 
 function renderScene(q) {
-  document.getElementById('scene').innerHTML = `
-    <div class="scene-emoji">${q.subject.e}</div>
-    <div class="scene-arrow">→</div>
-    <div class="scene-emoji">${q.object.e}</div>
-    <div class="scene-arrow">→</div>
-    <div class="scene-emoji">${q.verb.e}</div>
-  `;
+  const parts = currentLevel === 1
+    ? [q.object.e, q.verb.e]
+    : [q.subject.e, q.object.e, q.verb.e];
+  let html = '';
+  parts.forEach((e, i) => {
+    if (i > 0) html += '<div class="scene-arrow">→</div>';
+    html += `<div class="scene-emoji">${e}</div>`;
+  });
+  document.getElementById('scene').innerHTML = html;
 }
 
 function renderQLabel() {
-  const labels = ['だれ　が？', 'なに　を？', 'どう　する？'];
-  document.getElementById('q-label').textContent = labels[currentSlot];
+  document.getElementById('q-label').textContent = getQLabels()[currentSlot];
 }
 
 function renderSentenceTemplate() {
   const q = quizData[currentQ];
-  const slots = ['subject', 'object', 'verb'];
+  const slotNames = getSlotNames();
   let html = '';
-  slots.forEach((slotName, i) => {
+  slotNames.forEach((slotName, i) => {
     let content = '？';
     let cls = 'slot';
     if (slotsAnswered[i]) {
@@ -351,15 +412,17 @@ function renderSentenceTemplate() {
       cls = 'slot active';
     }
     html += `<div class="${cls}">${content}</div>`;
-    if (i === 0) html += '<span class="particle">が</span>';
-    if (i === 1) html += '<span class="particle">を</span>';
+    // 助詞を挿入
+    if (currentLevel === 2 && i === 0) html += '<span class="particle">が</span>';
+    if (currentLevel === 2 && i === 1) html += '<span class="particle">を</span>';
+    if (currentLevel === 1 && i === 0) html += '<span class="particle">を</span>';
   });
   document.getElementById('sentence-template').innerHTML = html;
 }
 
 function renderChoices() {
   const q = quizData[currentQ];
-  const slotName = ['subject', 'object', 'verb'][currentSlot];
+  const slotName = getSlotNames()[currentSlot];
   const correctWord = q[slotName].w;
   const allWords = [...new Set(questions.map(qq => qq[slotName].w))];
   const distractors = shuffle(allWords.filter(w => w !== correctWord)).slice(0, 2);
@@ -379,7 +442,7 @@ function renderChoices() {
 function handleAnswer(selected, btn) {
   if (slotsAnswered[currentSlot]) return;
   const q = quizData[currentQ];
-  const slotName = ['subject', 'object', 'verb'][currentSlot];
+  const slotName = getSlotNames()[currentSlot];
   const correctWord = q[slotName].w;
 
   slotsAnswered[currentSlot] = true;
@@ -399,7 +462,8 @@ function handleAnswer(selected, btn) {
 
   renderSentenceTemplate();
 
-  if (currentSlot < 2) {
+  const lastSlot = getSlotCount() - 1;
+  if (currentSlot < lastSlot) {
     setTimeout(() => {
       currentSlot++;
       renderSentenceTemplate();
@@ -411,13 +475,14 @@ function handleAnswer(selected, btn) {
   } else {
     document.getElementById('total-count').textContent = currentQ + 1;
     const numCorrect = slotsCorrect.filter(c => c).length;
+    const allCorrect = (numCorrect === getSlotCount());
     setTimeout(() => {
-      if (numCorrect === 3) {
+      if (allCorrect) {
         correctCount++;
         document.getElementById('correct-count').textContent = correctCount;
         feedback.textContent = '🎉 ぜんぶ せいかい！すごい！';
         feedback.className = 'feedback correct-msg';
-      } else if (numCorrect === 2) {
+      } else if (numCorrect >= 1) {
         feedback.textContent = '😊 おしい！もうちょっと！';
         feedback.className = 'feedback half-msg';
       } else {
